@@ -262,7 +262,7 @@ input[type="file"]:focus label {
 .status-icon {
     text-align: center;
     font-size: 5rem;
-    padding-top: 5rem;
+    padding-top: 2.5rem;
     display: flex;
     flex-direction: column;
 }

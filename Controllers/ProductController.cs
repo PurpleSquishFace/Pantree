@@ -25,6 +25,7 @@ namespace Pantree.Core.Controllers
             if (barcode.ReadBarcode())
             {
                 model.ScanSuccessful = barcode.ScanSuccessful;
+                model.Code = barcode.OutputCode;
 
                 var product = ProductService.GetProduct(barcode.OutputCode);
 
@@ -58,6 +59,7 @@ namespace Pantree.Core.Controllers
         {
             var model = new ResultView
             {
+                Code = code,
                 ScanSuccessful = true
             };
 

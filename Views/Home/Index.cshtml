@@ -65,6 +65,8 @@
 
         $('body').on('click', '#scanButton', function () {
 
+            $('.status-icon .error').hide();
+            $('.status-icon .error-message').empty().hide();
             $('.content-hero, #scanButton').slideUp();
             $('.cancel-button, .hidden-container').slideDown();
 
@@ -117,6 +119,8 @@
                     $('.status-icon .loading').hide();
                     $('.status-icon .error').show();
                     $('.status-icon .error-message').html("Could not upload image").show();
+                    $('#cancelButton').click();
+
                 }
             });
             $(form).trigger("reset");

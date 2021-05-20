@@ -8,6 +8,7 @@ namespace Pantree.Core.AppModels
 {
     public class ResultView
     {
+        public string Code { get; set; }
         public bool ScanSuccessful { get; set; }
         public bool LoadProductSuccessful { get; set; }
         public ProductView ProductView { get; set; }

@@ -53,6 +53,7 @@ $('body').on('submit', '.load-partial', function () {
         data: form.serialize(),
         success: function (result) {
             $('#' + partialContainer).empty().html(result);
+            form[0].reset();
 
             if (callback !== null) {
                 window[callback]();

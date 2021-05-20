@@ -338,3 +338,9 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Config
+
+*appsettings.json
+*appsettings.example.Development.json
+*aws-beanstalk-tools-defaults.json
