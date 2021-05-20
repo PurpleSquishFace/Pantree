@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Account";
+}
+
+<h2>@User.Identity.Name</h2>
+
+@CurrentUser.Details(User.UserID<int>()).UserName<br />
+@CurrentUser.Details(User.UserID<int>()).Name<br />
+@CurrentUser.Details(User.UserID<int>()).Email<br />
+@CurrentUser.Details(User.UserID<int>()).id<br />
+
+<a asp-controller="Account" asp-action="LogOut">Log Out</a>
+

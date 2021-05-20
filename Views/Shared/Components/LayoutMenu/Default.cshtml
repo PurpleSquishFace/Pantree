@@ -1,0 +1,27 @@
+﻿@model List<LocationView>
+
+<div class="navbar-menu">
+    <h2>New</h2>
+    <ul>
+        <li><a asp-controller="Warehouse" asp-action="CreateLocation">Location</a></li>
+        <li><a asp-controller="Warehouse" asp-action="CreateStore">Store</a></li>
+    </ul>
+
+    <hr />
+
+    @foreach (var location in Model)
+    {
+        <a asp-controller="Warehouse" asp-action="Location" asp-route-id="@location.LocationID">
+            <h2>@location.LocationName</h2>
+        </a>
+        <ul>
+            @foreach (var store in location.Stores)
+            {
+                <li>
+                    <a asp-controller="Warehouse" asp-action="Store" asp-route-id="@store.StoreID">@store.StoreName</a>
+                </li>
+            }
+        </ul>
+    }
+
+</div>

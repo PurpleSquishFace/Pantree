@@ -1,0 +1,43 @@
+﻿@model StoreCreate
+
+@{
+    ViewData["Title"] = "Create Store";
+}
+
+<div class="content-sign-in">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-controller="Warehouse" asp-action="CreateStore" method="post">
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="LocationID"></label>
+                <select asp-for="LocationID" asp-items="@(new SelectList(Model.Locations, "LocationID", "LocationName"))">
+                    <option disabled selected>Please Select</option>
+                </select>
+            </div>
+            <span asp-validation-for="LocationID"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="StoreName"></label>
+                <input asp-for="StoreName" />
+            </div>
+            <span asp-validation-for="StoreName"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="StoreDescription"></label>
+                <input asp-for="StoreDescription" />
+            </div>
+            <span asp-validation-for="StoreDescription"></span>
+        </div>
+
+        <div class="container-center">
+            <button type="submit">Create</button>
+        </div>
+
+    </form>
+</div>

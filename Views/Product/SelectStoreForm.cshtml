@@ -1,0 +1,33 @@
+﻿@model ItemStoreSelect
+
+<div id="form-partial" class="output-form">
+
+    <form id="SelectStore" asp-controller="Product" asp-action="AddItemForm" method="post" class="load-partial" attr-partial="form-partial">
+
+        <input asp-for="ProductID" type="hidden" />
+
+        <div class="container-input">
+            <div class="input">
+                <label for="Location">Location</label>
+                <select id="Location" class="load-dropdown" attr-url="@Url.Action("GetStores", "Warehouse")" attr-for="StoreID" asp-items="@(new SelectList(Model.Locations, "LocationID", "LocationName"))">
+                    <option disabled selected>Please Select</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="StoreID"></label>
+                <select asp-for="StoreID">
+                    <option disabled selected>Please Select</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="container-center">
+            <button type="submit">Add To Store</button>
+        </div>
+
+    </form>
+
+</div>

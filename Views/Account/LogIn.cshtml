@@ -1,0 +1,43 @@
+﻿@model UserLogin
+
+@{
+    ViewData["Title"] = "Log In";
+}
+<div class="content-sign-in">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-controller="Account" asp-action="LogIn" method="post">
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" />
+            </div>
+            <span asp-validation-for="UserName"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" />
+            </div>
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="RemainLoggedIn"></label>
+                <div>
+                    <input asp-for="RemainLoggedIn" />
+                </div>
+            </div>
+        </div>
+
+        <div class="container-center">
+            <button type="submit">Log In</button>
+        </div>
+
+        <p><a asp-controller="Account" asp-action="Register">Register</a></p>
+    </form>
+</div>
+

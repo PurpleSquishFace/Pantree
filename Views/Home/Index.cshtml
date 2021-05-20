@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+    <div class="content-main">
+
+        <div class="content-hero">
+            Scan your way to happiness!
+        </div>
+
+        <div class="content-action">
+            <a class="button" id="scanButton">Scan</a>
+            <div class="cancel-button hidden">
+                <button class="button" id="cancelButton">Cancel</button>
+            </div>
+        </div>
+
+        <div class="hidden-container hidden">
+
+            <div class="video-container">
+                <video id="video" class="video"></video>
+            </div>
+
+            <div class="alt-container">
+
+                <form id="BarcodeForm" asp-controller="Product" asp-action="Scan" method="post">
+                    <div class="file-input-sm">
+                        <label for="imageFile">Upload Barcode</label>
+                        <input id="imageFile" name="imageFile" type="file" attr-form="BarcodeForm" />
+                    </div>
+                </form>
+
+                <form id="manualForm" asp-controller="Product" asp-action="ScanWithCode" method="post" class="load-partial" attr-partial="ProductInfo" attr-callback="SlideAfterLoad">
+                    <button type="button" class="button-sm" id="enterButton">Enter Code</button>
+                    <div class="manual-container hidden">
+                        <div class="container-input">
+                            <div class="input">
+                                <label for="code"></label>
+                                <input id="code" name="code" type="text" />
+                            </div>
+                            <div class="container-center">
+                                <button type="submit">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>            
+
+        </div>
+
+        <div class="status-icon">
+            <i class="loading fas fa-spinner fa-spin hidden"></i>
+            <i class="error fas fa-times hidden"></i>
+            <span class="error-message"></span>
+        </div>
+    </div>
+
+<div id="ProductInfo" class="content-secondary"></div>
+
+@section Scripts {
+    <script>
+
+        const codeReader = new ZXing.BrowserBarcodeReader();
+
+        $('body').on('click', '#scanButton', function () {
+
+            $('.content-hero, #scanButton').slideUp();
+            $('.cancel-button, .hidden-container').slideDown();
+
+            codeReader.decodeOnceFromVideoDevice(null, 'video').then(function (result) {
+                let code = result.text;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ScanWithCode", "Product")',
+                    data: { code },
+                    success: function (result) {
+                        $('#ProductInfo').empty().html(result);
+                        SlideAfterLoad();
+                    }
+                });
+
+            }).catch((err) => { console.log(err); });
+        });
+
+        $('body').on('click', '#cancelButton', function () {
+            $('.cancel-button, .hidden-container, .manual-container').slideUp();
+            $('.content-hero, #scanButton').slideDown();
+            codeReader.reset();
+        });
+
+        $('body').on('click', '#enterButton', function () {
+            $('.manual-container').slideDown();
+            $('#code').focus();
+        });
+
+        $('#imageFile').change(function () {
+            let form = $('#' + $(this).attr('attr-form'));
+            let data = new FormData(document.getElementById($(this).attr('attr-form')));
+
+            $('#ProductInfo').empty();
+            $('.status-icon .loading').show();
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    $('.status-icon .loading').hide();
+                    $('#ProductInfo').empty().html(result);
+                    SlideAfterLoad();
+                },
+                error: function () {
+                    $('.status-icon .loading').hide();
+                    $('.status-icon .error').show();
+                    $('.status-icon .error-message').html("Could not upload image").show();
+                }
+            });
+            $(form).trigger("reset");
+        });
+
+        function SlideAfterLoad() {
+            $("html, body").animate({ scrollTop: jQuery(window).height() }, 1500);
+            $('#cancelButton').click();
+        }
+
+    </script>
+}

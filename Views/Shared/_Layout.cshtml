@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pantree</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    @*<link rel="manifest" href="/site.webmanifest">*@
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/cropper/cropper.min.css" />
+</head>
+<body>
+    <div class="navbar navbar-top">
+        <div class="navbar-icon">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="button-nav navbar-menu-button">
+                    <div class="navbar-hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="LogIn"><i class="fas fa-bars"></i></a>
+            }
+        </div>
+        <div>
+            <a asp-controller="Home" asp-action="Index">Pantree</a>
+        </div>
+        <div class="navbar-icon">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Manage">
+                    @if (CurrentUser.Details(User.UserID<int>()).ProfileImageID == null)
+                    {
+                        <i class="fas fa-user-circle"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-user-circle"></i>
+                        //<img src="@Url.Action("ProfileImage", "Home")" class="profile-image" />
+                    }
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="LogIn"><i class="fas fa-user-circle"></i></a>
+            }
+        </div>
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        @await Component.InvokeAsync("LayoutMenu")
+    }
+
+    <div class="body-content">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/lib/cropper/cropper.min.js"></script>
+    <script src="~/lib/cropper/jquery-cropper.min.js"></script>
+    <script src="~/lib/zxing-js/zxing.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

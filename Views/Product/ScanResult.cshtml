@@ -1,0 +1,52 @@
+﻿@model ResultView
+
+<div class="output">
+    @if (!Model.ScanSuccessful)
+    {
+        <div class="status-icon">
+            <i class="error fas fa-times"></i>
+            <span class="error-message">Uh oh, looks like we couldn't scan the barcode...</span>
+        </div>
+
+    }
+    else if (!Model.LoadProductSuccessful)
+    {
+        <div class="status-icon">
+            <i class="error fas fa-times"></i>
+            <span class="error-message">Oh dear, we can't find a product that matches your barcode...</span>
+        </div>
+    }
+    else
+    {
+        <div class="output-view">
+
+            <div class="product-image">
+                <img src="@Model.ProductView.ImageURL" />
+            </div>
+
+            <div>
+                <h2>Product Name</h2>
+                <p>@Model.ProductView.ProductName</p>
+            </div>
+
+            <div>
+                <h3>Ingredients</h3>
+                <p>@Model.ProductView.IngredientList</p>
+            </div>
+
+            <div>
+                <b>Barcode Number</b> @Model.ProductView.ProductCode
+            </div>
+
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <br />
+            <partial name="SelectStoreForm" model="Model.ItemStoreSelect" />
+        }
+    }
+    <div class="btn-top">
+        <i class="fas fa-arrow-alt-circle-up"></i>
+    </div>
+</div>

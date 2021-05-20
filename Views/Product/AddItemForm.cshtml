@@ -1,0 +1,38 @@
+﻿@model ItemCreate
+
+    <div>There are currently @Model.CurrentQuantity item/s in the store: @Model.StoreName</div>
+
+<form id="AddItem" asp-controller="Product" asp-action="AddItem" method="post">
+
+    <input asp-for="ProductID" type="hidden" />
+    <input asp-for="StoreID" type="hidden" />
+
+    <div class="container-input">
+        <div class="input">
+            <label asp-for="ItemName"></label>
+            <input asp-for="ItemName" />
+        </div>
+        <span asp-validation-for="ItemName"></span>
+    </div>
+
+    <div class="container-input">
+        <div class="input">
+            <label asp-for="Quantity"></label>
+            <input asp-for="Quantity" />
+        </div>
+        <span asp-validation-for="Quantity"></span>
+    </div>
+
+    <div class="container-input">
+        <div class="input">
+            <label asp-for="Notes"></label>
+            <textarea asp-for="Notes" />
+        </div>
+        <span asp-validation-for="Notes"></span>
+    </div>
+
+    <div class="container-center">
+        <button type="submit">Add</button>
+    </div>
+
+</form>

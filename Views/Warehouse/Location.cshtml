@@ -1,0 +1,22 @@
+﻿@model LocationView
+
+@{
+    ViewData["Title"] = Model.LocationName;
+}
+
+<h2>@Model.LocationName</h2>
+
+
+@foreach (var store in Model.Stores)
+{
+    <a asp-controller="Warehouse" asp-action="Store" asp-route-id="@store.StoreID">
+        @store.StoreName (@store.Items.Sum(i => i.Quantity) items of @store.Items.Count products)
+    </a>
+    <ul>
+        @foreach (var item in store.Items.OrderByDescending(i => i.Quantity).Take(3))
+        {
+            <li>@item.ItemName (Qty. @item.Quantity)</li>
+        }
+    </ul>
+
+}

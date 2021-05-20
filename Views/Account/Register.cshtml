@@ -1,0 +1,51 @@
+﻿@model Pantree.Core.AppModels.UserRegister
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="content-sign-in">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-controller="Account" asp-action="Register" method="post">
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" />
+            </div>
+            <span asp-validation-for="UserName"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+            </div>
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" />
+            </div>
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" />
+            </div>
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="container-center">
+            <button type="submit">Register</button>
+        </div>
+
+    </form>
+
+</div>
+
