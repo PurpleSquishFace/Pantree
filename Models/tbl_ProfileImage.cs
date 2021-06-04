@@ -12,7 +12,7 @@ namespace Pantree.Core.Models
         [Key]
         public int ProfileImageID { get; set; }
         public byte[] ProfileImage { get; set; }
-        public string AlernativeText { get; set; }
+        public string AlternativeText { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Deleted { get; set; }
         public DateTime? DeletedDate { get; set; }

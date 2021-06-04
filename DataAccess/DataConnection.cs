@@ -247,5 +247,33 @@ namespace Pantree.Core.DataAccess
 
             return item;
         }
+
+        public int SaveProfileImage(tbl_ProfileImage image)
+        {
+            int profileImageID;
+            using (var connection = new SqlConnection(Configuration.ConnectionString)) 
+            {
+                if (image.ProfileImageID == 0)
+                {
+                    profileImageID = (int)connection.Insert(image);
+                }
+                else
+                {
+                    connection.Update(image);
+                    profileImageID = image.ProfileImageID;
+                }
+            }
+            return profileImageID;
+        }
+
+        public void UpdateUserProfileImage(int userID, int profileImageID)
+        {
+            string sql = "UPDATE dbo.AspNetUsers SET ProfileImageID = @profileImageID WHERE Id = @userID;";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Query(sql, new { userID, profileImageID });
+            }
+        }
     }
 }

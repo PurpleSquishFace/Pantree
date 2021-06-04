@@ -68,5 +68,28 @@ namespace Pantree.Core.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult ProfileImage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadProfileImages(IFormFile profileImage)
+        {
+            ImageService ImageService = new ImageService();
+
+            if (CurrentUser.Details(UserID).ProfileImageID == null)
+            {
+                await ImageService.AddProfileImage(UserID, profileImage);
+            }
+            else
+            {
+                ImageService.UpdateProfileImage(UserID, profileImage);
+            }
+
+            return RedirectToAction("Manage");
+        }
     }
 }

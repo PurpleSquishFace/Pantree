@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Profile Image";
+}
+
+<form asp-controller="Account" asp-action="UploadProfileImages" method="post" enctype="multipart/form-data">
+
+    <label for="profileImage">Upload profile Image</label>
+    <input id="profileImage" name="profileImage" type="file" />
+    
+    <button type="submit">Save</button>
+</form>
