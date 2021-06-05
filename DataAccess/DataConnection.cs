@@ -275,5 +275,18 @@ namespace Pantree.Core.DataAccess
                 connection.Query(sql, new { userID, profileImageID });
             }
         }
+
+        public T GetProfileImage<T>(int profileImageID)
+        {
+            T profileImage = default;
+            string sql = "SELECT * FROM Images.tbl_ProfileImages WHERE ProfileImageID = @profileImageID";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                profileImage = connection.QuerySingleOrDefault<T>(sql, new { profileImageID });
+            }
+
+            return profileImage;
+        }
     }
 }

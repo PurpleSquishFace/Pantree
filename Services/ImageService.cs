@@ -33,7 +33,7 @@ namespace Pantree.Core.Services
 
                 int profileImageID = db.SaveProfileImage(image);
                 db.UpdateUserProfileImage(userID, profileImageID);
-                //CurrentUser.UpdateProfileImage(userID);
+                CurrentUser.UpdateProfileImage(userID, profileImageID);
 
                 success = true;
             }
@@ -45,9 +45,38 @@ namespace Pantree.Core.Services
             return success;
         }
 
-        public bool UpdateProfileImage(int userID, IFormFile profileImage)
+        public async Task<bool> UpdateProfileImage(int userID, int profileImageID, IFormFile profileImage)
         {
-            throw new NotImplementedException();
+            bool success;
+            try
+            {
+                var image = db.GetProfileImage<tbl_ProfileImage>(profileImageID);
+                image.ProfileImage = await profileImage.GetBytes();
+                image.CreatedDate = DateTime.Now;
+
+                db.SaveProfileImage(image);
+                CurrentUser.UpdateProfileImage(userID, profileImageID);
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return success;
+        }
+
+        public ProfileImageView GetProfileImage(int? profileImageID)
+        {
+            if (profileImageID == null)
+            {
+                return null;
+            }
+            else
+            {
+                return db.GetProfileImage<ProfileImageView>((int)profileImageID);
+            }
         }
     }
 }

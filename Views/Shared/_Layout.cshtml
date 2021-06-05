@@ -48,8 +48,7 @@
                     }
                     else
                     {
-                        <i class="fas fa-user-circle"></i>
-                        //<img src="@Url.Action("ProfileImage", "Home")" class="profile-image" />
+                        <img src="@Url.Action("ProfileImage", "Home")" alt="@CurrentUser.ProfileImage(User.UserID<int>()).AlternativeText" class="profile-image" />
                     }
                 </a>
             }

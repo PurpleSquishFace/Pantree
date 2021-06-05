@@ -2,10 +2,128 @@
     ViewData["Title"] = "Profile Image";
 }
 
-<form asp-controller="Account" asp-action="UploadProfileImages" method="post" enctype="multipart/form-data">
+<div class="content-main">
 
-    <label for="profileImage">Upload profile Image</label>
-    <input id="profileImage" name="profileImage" type="file" />
-    
-    <button type="submit">Save</button>
-</form>
+    <h2>Profile Image</h2>
+
+    <div id="BtnUpload" class="container-center">
+        <div class="file-input">
+            <label for="LoadImage">Select Image</label>
+            <input id="LoadImage" name="LoadImage" type="file" accept="image/*" />
+        </div>
+    </div>
+
+    <div class="container-center upload-reveal">
+        <div>
+            <canvas id="Image" class="image-profile-editor" />
+        </div>
+    </div>
+
+    <div class="container-center upload-reveal">
+        <form id="ProfileImageForm" asp-controller="Account" asp-action="UploadProfileImage" method="post" enctype="multipart/form-data">
+            <input id="CropImage" type="button" class="button" value="Use Selection" />
+        </form>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+
+        let canvas = $("#Image"),
+            context = canvas.get(0).getContext("2d");
+
+
+        $('body').on('change', '#LoadImage', function () {
+            if (this.files && this.files[0]) {
+                if (this.files[0].type.match(/^image\//)) {
+
+                    var reader = new FileReader();
+                    reader.onload = function (evt) {
+                        var img = new Image();
+                        img.onload = function () {
+                            context.canvas.height = img.height;
+                            context.canvas.width = img.width;
+                            context.drawImage(img, 0, 0);
+                            var cropper = canvas.cropper({
+                                aspectRatio: 1
+                            });
+
+                            $('body').on('click', '#CropImage', function () {
+                                let form = $('#ProfileImageForm');
+                                let data = new FormData(document.getElementById('ProfileImageForm'));
+
+                                var croppedImageDataURL = getRoundedCanvas(canvas.cropper('getCroppedCanvas')).toDataURL("image/png");
+                                var blob = dataURItoBlob(croppedImageDataURL);
+                                data.append('ProfileImage', blob);
+
+                                $.ajax({
+                                    type: form.attr('method'),
+                                    url: form.attr('action'),
+                                    data: data,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function () {
+                                        window.location.replace('@Url.Action("Manage", "Account")');
+                                    },
+                                    error: function () {
+                                        window.location.replace('@Url.Action("Manage", "Account")');
+                                    }
+                                });
+
+                                $(form).trigger("reset");
+                            });
+
+                        };
+
+                        $('#BtnUpload').remove();
+
+                        img.src = evt.target.result;
+                    };
+
+                    reader.readAsDataURL(this.files[0]);
+                    $('.upload-reveal').show();
+                }
+            }
+        });
+
+        function getRoundedCanvas(sourceCanvas) {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            var width = sourceCanvas.width;
+            var height = sourceCanvas.height;
+
+            canvas.width = width;
+            canvas.height = height;
+            context.imageSmoothingEnabled = true;
+            context.drawImage(sourceCanvas, 0, 0, width, height);
+            context.globalCompositeOperation = 'destination-in';
+            context.beginPath();
+            context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+            context.fill();
+            return canvas;
+        }
+
+        function dataURItoBlob(dataURI) {
+            // convert base64/URLEncoded data component to raw binary data held in a string
+            var byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = unescape(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to a typed array
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([ia], {
+                type: mimeString
+            });
+        }
+    </script>
+}

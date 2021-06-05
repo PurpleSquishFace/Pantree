@@ -12,6 +12,6 @@ namespace Pantree.Core.AppModels
         public string Name { get; set; }
         public string Email { get; set; }
 
-        public ImageProfile ProfileImage { get; set; }
+        public ProfileImageView ProfileImage { get; set; }
     }
 }

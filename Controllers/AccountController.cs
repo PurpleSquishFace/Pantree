@@ -76,17 +76,18 @@ namespace Pantree.Core.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadProfileImages(IFormFile profileImage)
+        public async Task<IActionResult> UploadProfileImage(IFormFile profileImage)
         {
             ImageService ImageService = new ImageService();
+            var profileImageID = CurrentUser.Details(UserID).ProfileImageID;
 
-            if (CurrentUser.Details(UserID).ProfileImageID == null)
+            if (profileImageID == null)
             {
                 await ImageService.AddProfileImage(UserID, profileImage);
             }
             else
             {
-                ImageService.UpdateProfileImage(UserID, profileImage);
+                await ImageService.UpdateProfileImage(UserID, (int)profileImageID, profileImage);
             }
 
             return RedirectToAction("Manage");

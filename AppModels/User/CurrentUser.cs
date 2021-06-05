@@ -26,8 +26,9 @@ namespace Pantree.Core.AppModels
 
             var user = userService.GetUser(userName);
             var locations = GetLocations(user.id);
+            var profileImage = GetProfileImage(user.ProfileImageID);
 
-            SessionUser = new SessionUser(user, locations);
+            SessionUser = new SessionUser(user, locations, profileImage);
         }
 
         public static void Set(ISession session, UserService userService, int userID)
@@ -36,8 +37,9 @@ namespace Pantree.Core.AppModels
 
             var user = userService.GetUser(userID);
             var locations = GetLocations(user.id);
+            var profileImage = GetProfileImage(user.ProfileImageID);
 
-            SessionUser = new SessionUser(user, locations);
+            SessionUser = new SessionUser(user, locations, profileImage);
         }
 
         public static void UpdateLocations(int userID)
@@ -45,6 +47,19 @@ namespace Pantree.Core.AppModels
             if (SessionUser.Details.id == userID)
             {
                 SessionUser.Locations = GetLocations(SessionUser.Details.id);
+            }
+        }
+
+        public static void UpdateProfileImage(int userID, int profileImageID)
+        {
+            if (SessionUser.Details.id == userID)
+            {
+                var user = SessionUser;
+
+                var profileImage = GetProfileImage(profileImageID);
+                user.ProfileImage = profileImage;
+
+                SessionUser = user;
             }
         }
 
@@ -59,6 +74,13 @@ namespace Pantree.Core.AppModels
             }
 
             return locations;
+        }
+
+        private static ProfileImageView GetProfileImage(int? profileImageID)
+        {
+            ImageService imageService = new ImageService();
+            var profileImage = imageService.GetProfileImage(profileImageID);
+            return profileImage;
         }
 
         public static AspNetUser Details(int userID)
@@ -85,6 +107,18 @@ namespace Pantree.Core.AppModels
             }
         }
 
+        public static ProfileImageView ProfileImage(int userID)
+        {
+            if (SessionUser.Details.id == userID)
+            {
+                return SessionUser.ProfileImage;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static void Clear()
         {
             if (Session != null)
@@ -98,12 +132,15 @@ namespace Pantree.Core.AppModels
     {
         public AspNetUser Details { get; set; }
 
+        public ProfileImageView ProfileImage { get; set; }
+        
         public List<LocationView> Locations { get; set; }
 
-        public SessionUser(AspNetUser user, List<LocationView> locations)
+        public SessionUser(AspNetUser user, List<LocationView> locations, ProfileImageView profileImage)
         {
             Details = user;
             Locations = locations;
+            ProfileImage = profileImage;
         }
     }
 }
