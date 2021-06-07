@@ -83,6 +83,12 @@ namespace Pantree.Core.Services
             var userID = UserManager.GetUserId(user);
             return int.Parse(userID);
         }
+
+        public List<FriendView> GetFriends(int userID)
+        {
+            var list = db.GetUserFriends<FriendView>(userID);
+            return list;
+        }
                 
         #region Sample database updates
 

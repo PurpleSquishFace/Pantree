@@ -288,5 +288,25 @@ namespace Pantree.Core.DataAccess
 
             return profileImage;
         }
+
+        public List<T> GetUserFriends<T>(int userID)
+        {
+            List<T> list = new List<T>();
+            string sql = "SELECT T1.Id, T1.UserName, T1.Name, T1.ProfileImageID, T3.ProfileImage, T3.AlternativeText " + 
+                            "FROM dbo.AspNetUsers T1 " + 
+                            "INNER JOIN Users.tbl_Friends T2 ON T1.Id = T2.UserID_1 " +
+                            "LEFT JOIN Images.tbl_ProfileImages T3 ON T1.ProfileImageID = T3.ProfileImageID WHERE T2.UserID_2 = @userID " +
+                   "UNION SELECT T1.Id, T1.UserName, T1.Name, T1.ProfileImageID, T3.ProfileImage, T3.AlternativeText " + 
+                            "FROM dbo.AspNetUsers T1 " + 
+                            "INNER JOIN Users.tbl_Friends T2 ON T1.Id = T2.UserID_2 " + 
+                            "LEFT JOIN Images.tbl_ProfileImages T3 ON T1.ProfileImageID = T3.ProfileImageID WHERE T2.UserID_1 = @userID";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                list = connection.Query<T>(sql, new { userID }).ToList();
+            }
+
+            return list;
+        }
     }
 }

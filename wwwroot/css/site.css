@@ -66,9 +66,10 @@
     padding: 0;
 }
 
-.navbar .profile-image {
+.profile-image {
     height: 3rem;
     min-width: 3rem;
+    font-size: 3rem;
 }
 
 .body-content {
@@ -431,4 +432,27 @@ img {
     align-items: flex-start;
     justify-content: space-around;
     margin: 1rem 0;
+}
+
+.container-flex {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+}
+
+    .container-flex > * {
+        margin: 5px 0;
+    }
+
+.btn-icon{
+    margin-left: 8px;
+}
+
+table {
+    text-align: left;
+    width: 100%;
 }

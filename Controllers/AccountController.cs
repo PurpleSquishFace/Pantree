@@ -92,5 +92,12 @@ namespace Pantree.Core.Controllers
 
             return RedirectToAction("Manage");
         }
+
+        public IActionResult Friends()
+        {
+            var list = UserService.GetFriends(UserID);
+
+            return View(list);
+        }
     }
 }

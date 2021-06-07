@@ -1,0 +1,38 @@
+﻿@model List<FriendView>
+
+@{
+    ViewData["Title"] = "Friends";
+}
+
+<h2>Friends</h2>
+
+<br />
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Username</th>
+            <th>User</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var friend in Model)
+        {
+            <tr>
+                <td>
+                    @if (friend.ProfileImage == null)
+                    {
+                        <i class="fas fa-user-circle profile-image"></i>
+                    }
+                    else
+                    {
+                        <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
+                    }
+                </td>
+                <td>@friend.UserName</td>
+                <td>@friend.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
