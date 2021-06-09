@@ -55,7 +55,7 @@ $('body').on('submit', '.load-partial', function () {
             $('#' + partialContainer).empty().html(result);
             form[0].reset();
 
-            if (callback !== null) {
+            if (callback != null) {
                 window[callback]();
             }
 

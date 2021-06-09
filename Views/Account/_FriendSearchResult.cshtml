@@ -1,12 +1,7 @@
 ﻿@model FriendMaster
 
-@{
-    ViewData["Title"] = "Friends";
-}
 
-<h2>Friends</h2>
-
-<br />
+<h3>Results for "@Model.SearchName"</h3>
 
 <table>
     <thead>
@@ -14,6 +9,7 @@
             <th></th>
             <th>Username</th>
             <th>User</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -32,31 +28,15 @@
                 </td>
                 <td>@friend.UserName</td>
                 <td>@friend.Name</td>
-            </tr>
-        }
+                <td>
+                    @if (friend.Id == Model.CurrentUser)
+                    {<span>That's you!</span>}
+                    else if (Model.FriendIDs.Contains(friend.Id))
+                    {<span>You're already friends!</span>}
+                    else
+                    {<a href="#">Add Friend</a>}
+                    </td>
+                </tr>
+            }
     </tbody>
 </table>
-
-<br />
-
-<h2>Search</h2>
-
-<div class="content-sign-in">
-    <form asp-controller="Account" asp-action="SearchUsers" method="post" class="load-partial" attr-partial="SearchResult">
-
-        <div class="container-input">
-            <div class="input">
-                <label asp-for="SearchName"></label>
-                <input asp-for="SearchName" />
-            </div>
-            <span asp-validation-for="SearchName"></span>
-        </div>
-
-        <div class="container-center">
-            <button type="submit">Search</button>
-        </div>
-
-    </form>
-</div>
-
-<div id="SearchResult"></div>

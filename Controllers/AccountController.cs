@@ -95,9 +95,23 @@ namespace Pantree.Core.Controllers
 
         public IActionResult Friends()
         {
-            var list = UserService.GetFriends(UserID);
+            var model = new FriendMaster
+            {
+                UserList = UserService.GetFriends(UserID)
+            };
 
-            return View(list);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SearchUsers(FriendMaster search)
+        {
+            search.UserList = UserService.SearchUserName(search.SearchName);
+            search.CurrentUser = CurrentUser.Details(UserID).id;
+            search.FriendIDs = UserService.GetFriends(UserID).Select(i => i.Id).ToList();
+
+            return PartialView("_FriendSearchResult", search);
         }
     }
 }

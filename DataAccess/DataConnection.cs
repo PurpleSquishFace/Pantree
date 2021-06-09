@@ -308,5 +308,20 @@ namespace Pantree.Core.DataAccess
 
             return list;
         }
+
+        public List<T> SearchUsers<T>(string searchTerm)
+        {
+            List<T> list = new List<T>();
+            string sql = "SELECT T1.Id, T1.UserName, T1.Name, T1.ProfileImageID, T2.ProfileImage, T2.AlternativeText " + 
+                            "FROM dbo.AspNetUsers T1 " +
+                            "LEFT JOIN Images.tbl_ProfileImages T2 ON T1.ProfileImageID = T2.ProfileImageID " +
+                            "WHERE T1.UserName LIKE @searchTerm ORDER BY LEN(T1.UserName);"; 
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                list = connection.Query<T>(sql, new { searchTerm = $"%{searchTerm.Replace("%","")}%" }).ToList();
+            }
+
+            return list;
+        }
     }
 }
