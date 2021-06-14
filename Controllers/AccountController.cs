@@ -107,11 +107,20 @@ namespace Pantree.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SearchUsers(FriendMaster search)
         {
-            search.UserList = UserService.SearchUserName(search.SearchName);
+            search.UserList = UserService.SearchUserName(search.SearchName, UserID);
             search.CurrentUser = CurrentUser.Details(UserID).id;
-            search.FriendIDs = UserService.GetFriends(UserID).Select(i => i.Id).ToList();
+            //search.FriendIDs = UserService.GetFriends(UserID).Select(i => i.Id).ToList();
 
             return PartialView("_FriendSearchResult", search);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SendFriendRequest(int UserID)
+        {
+            UserService.SendFriendRequest(UserID, this.UserID);
+
+            return RedirectToAction("Friends");
         }
     }
 }

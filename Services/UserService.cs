@@ -90,12 +90,24 @@ namespace Pantree.Core.Services
             return list;
         }
 
-        public List<FriendView> SearchUserName(string searchTerm)
+        public List<FriendView> SearchUserName(string searchTerm, int userID)
         {
             if (searchTerm.Length < 4) return new List<FriendView>();
-            return db.SearchUsers<FriendView>(searchTerm);
+            return db.SearchUsers<FriendView>(searchTerm, userID);
         }
-                
+
+        public void SendFriendRequest(int friendUserID, int currentUserID)
+        {
+            var request = new tbl_Friends
+            {
+                UserID_1 = currentUserID,
+                UserID_2 = friendUserID,
+                DateRequested = DateTime.Now
+            };
+
+            db.SendFriendRequest(request);
+        }
+
         #region Sample database updates
 
         //public List<User> GetUsers()

@@ -14,10 +14,11 @@
             <th></th>
             <th>Username</th>
             <th>User</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var friend in Model.UserList)
+        @foreach (var friend in Model.UserList.Where(i => !i.Blocked))
         {
             <tr>
                 <td>
@@ -32,6 +33,10 @@
                 </td>
                 <td>@friend.UserName</td>
                 <td>@friend.Name</td>
+                <td>@if (!friend.Accepted)
+                {
+                    @:Request Sent
+                }</td>
             </tr>
         }
     </tbody>

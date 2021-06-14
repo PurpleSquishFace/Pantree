@@ -10,6 +10,8 @@ namespace Pantree.Core.AppModels
         public int Id { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }
+        public bool Accepted { get; set; }
+        public bool Blocked { get; set; }
         public string ConvertedImage {
             get {
                 if (ProfileImage == null) return "";

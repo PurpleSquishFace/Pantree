@@ -292,14 +292,7 @@ namespace Pantree.Core.DataAccess
         public List<T> GetUserFriends<T>(int userID)
         {
             List<T> list = new List<T>();
-            string sql = "SELECT T1.Id, T1.UserName, T1.Name, T1.ProfileImageID, T3.ProfileImage, T3.AlternativeText " + 
-                            "FROM dbo.AspNetUsers T1 " + 
-                            "INNER JOIN Users.tbl_Friends T2 ON T1.Id = T2.UserID_1 " +
-                            "LEFT JOIN Images.tbl_ProfileImages T3 ON T1.ProfileImageID = T3.ProfileImageID WHERE T2.UserID_2 = @userID " +
-                   "UNION SELECT T1.Id, T1.UserName, T1.Name, T1.ProfileImageID, T3.ProfileImage, T3.AlternativeText " + 
-                            "FROM dbo.AspNetUsers T1 " + 
-                            "INNER JOIN Users.tbl_Friends T2 ON T1.Id = T2.UserID_2 " + 
-                            "LEFT JOIN Images.tbl_ProfileImages T3 ON T1.ProfileImageID = T3.ProfileImageID WHERE T2.UserID_1 = @userID";
+            string sql = "EXEC Users.usp_UserFriendList @userID;";
 
             using (var connection = new SqlConnection(Configuration.ConnectionString))
             {
@@ -309,19 +302,35 @@ namespace Pantree.Core.DataAccess
             return list;
         }
 
-        public List<T> SearchUsers<T>(string searchTerm)
+        public List<T> SearchUsers<T>(string searchTerm, int userID)
         {
             List<T> list = new List<T>();
-            string sql = "SELECT T1.Id, T1.UserName, T1.Name, T1.ProfileImageID, T2.ProfileImage, T2.AlternativeText " + 
-                            "FROM dbo.AspNetUsers T1 " +
-                            "LEFT JOIN Images.tbl_ProfileImages T2 ON T1.ProfileImageID = T2.ProfileImageID " +
-                            "WHERE T1.UserName LIKE @searchTerm ORDER BY LEN(T1.UserName);"; 
+            string sql = "EXEC Users.usp_SearchFriends @searchTerm, @userID"; 
+
             using (var connection = new SqlConnection(Configuration.ConnectionString))
             {
-                list = connection.Query<T>(sql, new { searchTerm = $"%{searchTerm.Replace("%","")}%" }).ToList();
+                list = connection.Query<T>(sql, new { searchTerm, userID }).ToList();
             }
 
             return list;
+        }
+
+        public int SendFriendRequest(tbl_Friends request)
+        {
+            int friendID;
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                if (request.FriendID == 0)
+                {
+                    friendID = (int)connection.Insert(request);
+                }
+                else
+                {
+                    connection.Update(request);
+                    friendID = request.FriendID;
+                }
+            }
+            return friendID;
         }
     }
 }

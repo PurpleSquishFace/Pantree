@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var friend in Model.UserList)
+        @foreach (var friend in Model.UserList.Where(i => !i.Blocked))
         {
             <tr>
                 <td>
@@ -31,12 +31,17 @@
                 <td>
                     @if (friend.Id == Model.CurrentUser)
                     {<span>That's you!</span>}
-                    else if (Model.FriendIDs.Contains(friend.Id))
+                    else if (friend.Accepted)
                     {<span>You're already friends!</span>}
                     else
-                    {<a href="#">Add Friend</a>}
-                    </td>
-                </tr>
-            }
+                    {
+                        <form asp-controller="Account" asp-action="SendFriendRequest">
+                            <input name="UserID" value="@friend.Id" type="hidden" />
+                            <button type="submit">Add Friend</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
