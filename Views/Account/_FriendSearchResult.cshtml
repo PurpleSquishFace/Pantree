@@ -33,6 +33,8 @@
                     {<span>That's you!</span>}
                     else if (friend.Accepted)
                     {<span>You're already friends!</span>}
+                    else if (friend.RequestSent)
+                    {<span>Request Sent</span>}
                     else
                     {
                         <form asp-controller="Account" asp-action="SendFriendRequest">

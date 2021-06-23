@@ -332,5 +332,15 @@ namespace Pantree.Core.DataAccess
             }
             return friendID;
         }
+
+        public void RemoveFriend(int friendUserID, int currentUserID)
+        {
+            string sql = "DELETE FROM Users.tbl_Friends WHERE (UserID_1 = @friendUserID AND UserID_2 = @currentUserID) OR (UserID_1 = @currentUserID AND UserID_2 = @friendUserID)";
+
+            using(var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Query(sql, new { friendUserID, currentUserID });
+            }
+        }
     }
 }

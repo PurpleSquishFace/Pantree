@@ -115,6 +115,15 @@ namespace Pantree.Core.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult RemoveFriend(int FriendUserID)
+        {
+            UserService.RemoveFriend(FriendUserID, UserID);
+
+            return RedirectToAction("Friends");
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SendFriendRequest(int UserID)
         {
