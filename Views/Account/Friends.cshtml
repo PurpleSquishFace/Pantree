@@ -33,21 +33,23 @@
                 </td>
                 <td>@friend.UserName</td>
                 <td>@friend.Name</td>
-                <td>@if (!friend.Accepted)
+                <td>
+                    @if (!friend.Accepted)
                     {<span>Request Sent</span>
-                     <form asp-controller="Account" asp-action="RemoveFriend" method="post">
-                         <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                         <button type="submit">Cancel Request</button>
-                     </form>}
-                    else {
+                        <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                            <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                            <button type="submit">Cancel Request</button>
+                        </form>}
+                    else
+                    {
                         <form asp-controller="Account" asp-action="RemoveFriend" method="post">
                             <input name="FriendUserID" value="@friend.Id" type="hidden" />
                             <button type="submit">Remove</button>
                         </form>
                     }
-                </td>
-            </tr>
-        }
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
 
