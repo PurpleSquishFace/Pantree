@@ -3,47 +3,54 @@
 
 <h3>Results for "@Model.SearchName"</h3>
 
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>Username</th>
-            <th>User</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var friend in Model.UserList.Where(i => !i.Blocked))
-        {
+@if (Model.UserList.Where(i => !i.Blocked).ToList().Count <= 0)
+{
+    <div>No results found...</div>
+}
+else
+{
+    <table>
+        <thead>
             <tr>
-                <td>
-                    @if (friend.ProfileImage == null)
-                    {
-                        <i class="fas fa-user-circle profile-image"></i>
-                    }
-                    else
-                    {
-                        <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
-                    }
-                </td>
-                <td>@friend.UserName</td>
-                <td>@friend.Name</td>
-                <td>
-                    @if (friend.Id == Model.CurrentUser)
-                    {<span>That's you!</span>}
-                    else if (friend.Accepted)
-                    {<span>You're already friends!</span>}
-                    else if (friend.RequestSent)
-                    {<span>Request Sent</span>}
-                    else
-                    {
-                        <form asp-controller="Account" asp-action="SendFriendRequest">
-                            <input name="UserID" value="@friend.Id" type="hidden" />
-                            <button type="submit">Add Friend</button>
-                        </form>
-                    }
-                </td>
+                <th></th>
+                <th>Username</th>
+                <th>User</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var friend in Model.UserList.Where(i => !i.Blocked))
+            {
+                <tr>
+                    <td>
+                        @if (friend.ProfileImage == null)
+                        {
+                            <i class="fas fa-user-circle profile-image"></i>
+                        }
+                        else
+                        {
+                            <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
+                        }
+                    </td>
+                    <td>@friend.UserName</td>
+                    <td>@friend.Name</td>
+                    <td>
+                        @if (friend.Id == Model.CurrentUser)
+                        {<span>That's you!</span>}
+                        else if (friend.Accepted)
+                        {<span>You're already friends!</span>}
+                        else if (friend.RequestSent)
+                        {<span>Request Sent</span>}
+                        else
+                        {
+                            <form asp-controller="Account" asp-action="SendFriendRequest">
+                                <input name="UserID" value="@friend.Id" type="hidden" />
+                                <button type="submit">Add Friend</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

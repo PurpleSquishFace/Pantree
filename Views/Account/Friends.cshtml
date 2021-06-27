@@ -8,56 +8,74 @@
 
 <br />
 
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>Username</th>
-            <th>User</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var friend in Model.UserList.Where(i => !i.Blocked))
-        {
+@if (Model.UserList.Count <= 0)
+{
+    <div>You're all alone, try searching for some new friends...</div>
+}
+else
+{
+    <table>
+        <thead>
             <tr>
-                <td>
-                    @if (friend.ProfileImage == null)
-                    {
-                        <i class="fas fa-user-circle profile-image"></i>
-                    }
-                    else
-                    {
-                        <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
-                    }
-                </td>
-                <td>@friend.UserName</td>
-                <td>@friend.Name</td>
-                <td>
-                    @if (!friend.Accepted)
-                    {<span>Request Sent</span>
-                        <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                <th></th>
+                <th>Username</th>
+                <th>User</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var friend in Model.UserList.Where(i => !i.Blocked))
+            {
+                <tr>
+                    <td>
+                        @if (friend.ProfileImage == null)
+                        {
+                            <i class="fas fa-user-circle profile-image"></i>
+                        }
+                        else
+                        {
+                            <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
+                        }
+                    </td>
+                    <td>@friend.UserName</td>
+                    <td>@friend.Name</td>
+                    <td>
+                        @if (!friend.Accepted)
+                        {<span>Request Sent</span>
+                            <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                <button type="submit">Cancel Request</button>
+                            </form>}
+                        else
+                        {
+                            <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                <button type="submit">Remove</button>
+                            </form>
+                        }
+                        <form asp-controller="Account" asp-action="BlockFriend" method="post">
                             <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                            <button type="submit">Cancel Request</button>
-                        </form>}
-                    else
-                    {
-                        <form asp-controller="Account" asp-action="RemoveFriend" method="post">
-                            <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                            <button type="submit">Remove</button>
+                            <button type="submit">Block</button>
                         </form>
-                    }
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 <br />
 
-<h2>Search</h2>
+<div>
+    <h2>Requests</h2>
+
+</div>
+
+<br />
 
 <div class="content-sign-in">
+    <h2>Search</h2>
+
     <form asp-controller="Account" asp-action="SearchUsers" method="post" class="load-partial" attr-partial="SearchResult">
 
         <div class="container-input">

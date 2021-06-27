@@ -108,6 +108,12 @@ namespace Pantree.Core.Services
             db.SendFriendRequest(request);
         }
 
+        public void BlockFriend(int friendUserID, int currentUserID)
+        {
+            int friendID = db.GetFriendUserID(friendUserID, currentUserID);
+            db.BlockFriend(friendID);
+        }
+
         public void RemoveFriend(int friendUserID, int currentUserID)
         {
             db.RemoveFriend(friendUserID, currentUserID);

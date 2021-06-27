@@ -125,6 +125,15 @@ namespace Pantree.Core.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult BlockFriend(int FriendUserID) 
+        {
+            UserService.BlockFriend(FriendUserID, UserID);
+
+            return RedirectToAction("Friends");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult SendFriendRequest(int UserID)
         {
             UserService.SendFriendRequest(UserID, this.UserID);

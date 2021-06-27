@@ -302,6 +302,19 @@ namespace Pantree.Core.DataAccess
             return list;
         }
 
+        public tbl_Friends GetUserFriend(int friendID)
+        {
+            tbl_Friends friendsData = new tbl_Friends();
+            string sql = "SELECT * FROM Users.tbl_Friends WHERE friendID = @friendID";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                friendsData = connection.QuerySingleOrDefault<tbl_Friends>(sql, new { friendID });
+            }
+
+            return friendsData;
+        }
+
         public List<T> SearchUsers<T>(string searchTerm, int userID)
         {
             List<T> list = new List<T>();
@@ -313,6 +326,32 @@ namespace Pantree.Core.DataAccess
             }
 
             return list;
+        }
+
+        public int GetFriendUserID(int userID_1, int userID_2)
+        {
+            int friendID = 0;
+            string sql = "SELECT FriendID FROM Users.tbl_Friends " +
+                        "WHERE (UserID_1 = @userID_1 AND UserID_2 = @userID_2) " +
+                        "OR (UserID_1 = @userID_2 AND UserID_2 = @userID_1)";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                friendID = connection.QuerySingleOrDefault<int>(sql, new { userID_1, userID_2 });
+            }
+
+            return friendID;
+        }
+
+        public void BlockFriend(int friendID)
+        {
+            var friendData = GetUserFriend(friendID);
+            friendData.Blocked = true;
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Update(friendData);
+            }
         }
 
         public int SendFriendRequest(tbl_Friends request)

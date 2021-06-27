@@ -15,7 +15,7 @@ namespace Pantree.Core.AppModels
         public int CurrentUser { get; set; }
 
         [Required]
-        [Display(Name = "Enter Username")]
+        [Display(Name = "Search Username")]
         public string SearchName { get; set; }
     }
 }
