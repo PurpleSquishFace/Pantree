@@ -116,7 +116,8 @@ namespace Pantree.Core.Services
 
         public void RemoveFriend(int friendUserID, int currentUserID)
         {
-            db.RemoveFriend(friendUserID, currentUserID);
+            int friendID = db.GetFriendUserID(friendUserID, currentUserID);
+            db.RemoveFriend(friendID);
         }
 
         public void AcceptFriendRequest(int friendUserID, int currentUserID)

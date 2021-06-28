@@ -346,6 +346,8 @@ namespace Pantree.Core.DataAccess
         public void BlockFriend(int friendID)
         {
             var friendData = GetUserFriend(friendID);
+            friendData.Accepted = false;
+            friendData.DateAccepted = null;
             friendData.Blocked = true;
 
             using (var connection = new SqlConnection(Configuration.ConnectionString))
@@ -384,13 +386,13 @@ namespace Pantree.Core.DataAccess
             }
         }
 
-        public void RemoveFriend(int friendUserID, int currentUserID)
+        public void RemoveFriend(int friendID)
         {
-            string sql = "DELETE FROM Users.tbl_Friends WHERE (UserID_1 = @friendUserID AND UserID_2 = @currentUserID) OR (UserID_1 = @currentUserID AND UserID_2 = @friendUserID)";
+            var friendData = GetUserFriend(friendID);
 
             using(var connection = new SqlConnection(Configuration.ConnectionString))
             {
-                connection.Query(sql, new { friendUserID, currentUserID });
+                connection.Delete(friendData);
             }
         }
     }

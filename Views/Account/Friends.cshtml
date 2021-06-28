@@ -108,6 +108,64 @@
                                 <input name="FriendUserID" value="@friend.Id" type="hidden" />
                                 <button type="submit">Accept</button>
                             </form>
+                            <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                <button type="submit">Decline</button>
+                            </form>
+                            <form asp-controller="Account" asp-action="BlockFriend" method="post">
+                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                <button type="submit">Block</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<br />
+
+<div>
+    <h2>Blocked Users</h2>
+
+    <br />
+
+    @if (Model.UserList.Where(i => i.Blocked).ToList().Count <= 0)
+    {
+        <div>Good news, nobody has been blocked!</div>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Username</th>
+                    <th>User</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var friend in Model.UserList.Where(i => i.Blocked))
+                {
+                    <tr>
+                        <td>
+                            @if (friend.ProfileImage == null)
+                            {
+                                <i class="fas fa-user-circle profile-image"></i>
+                            }
+                            else
+                            {
+                                <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
+                            }
+                        </td>
+                        <td>@friend.UserName</td>
+                        <td>@friend.Name</td>
+                        <td>
+                            <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                <button type="submit">Unblock</button>
+                            </form>
                         </td>
                     </tr>
                 }
