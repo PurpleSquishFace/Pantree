@@ -140,5 +140,14 @@ namespace Pantree.Core.Controllers
 
             return RedirectToAction("Friends");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AcceptFriend(int FriendUserID)
+        {
+            UserService.AcceptFriendRequest(FriendUserID, UserID);
+
+            return RedirectToAction("Friends");
+        }
     }
 }

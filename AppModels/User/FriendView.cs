@@ -11,6 +11,8 @@ namespace Pantree.Core.AppModels
         public string UserName { get; set; }
         public string Name { get; set; }
         public bool RequestSent { get; set; }
+        public bool ResponsePending { get; set; }
+        public bool RequestPending { get; set; }
         public bool Accepted { get; set; }
         public bool Blocked { get; set; }
         public string ConvertedImage {
