@@ -248,6 +248,19 @@ namespace Pantree.Core.DataAccess
             return item;
         }
 
+        public T GetItem<T>(int itemID)
+        {
+            T item = default;
+            string sql = "SELECT * FROM Products.tbl_Items WHERE ItemID = @itemID;";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                item = connection.QuerySingleOrDefault<T>(sql, new { itemID});
+            }
+
+            return item;
+        }
+
         public int SaveProfileImage(tbl_ProfileImage image)
         {
             int profileImageID;
@@ -393,6 +406,30 @@ namespace Pantree.Core.DataAccess
             using(var connection = new SqlConnection(Configuration.ConnectionString))
             {
                 connection.Delete(friendData);
+            }
+        }
+
+        public void DeleteItem(tbl_Items item)
+        {
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Delete(item);
+            }
+        }
+
+        public void DeleteStore(tbl_Stores store)
+        {
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Delete(store);
+            }
+        }
+
+        public void DeleteLocation(tbl_Locations location)
+        {
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Delete(location);
             }
         }
     }

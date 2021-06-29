@@ -6,6 +6,13 @@
 
 <h2>@Model.LocationName</h2>
 
+<a asp-controller="Warehouse" asp-action="CreateStore" asp-route-id="@Model.LocationID">Add Store</a>
+<form asp-controller="Warehouse" asp-action="DeleteLocation" method="post">
+    <input asp-for="LocationID" type="hidden" />
+    <button type="submit">Delete Location</button>
+</form>
+
+<br />
 
 @foreach (var store in Model.Stores)
 {

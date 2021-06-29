@@ -6,6 +6,12 @@
 
 <h2>@Model.StoreName</h2>
 
+<form asp-controller="Warehouse" asp-action="DeleteStore" method="post">
+    <input asp-for="LocationID" type="hidden" />
+    <input asp-for="StoreID" type="hidden" />
+    <button type="submit">Delete Store</button>
+</form>
+
 <ul>
     @foreach (var item in Model.Items)
     {

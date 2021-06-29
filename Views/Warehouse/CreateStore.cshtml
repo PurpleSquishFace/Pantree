@@ -12,7 +12,7 @@
         <div class="container-input">
             <div class="input">
                 <label asp-for="LocationID"></label>
-                <select asp-for="LocationID" asp-items="@(new SelectList(Model.Locations, "LocationID", "LocationName"))">
+                <select asp-for="LocationID" asp-items="@(new SelectList(Model.Locations, "LocationID", "LocationName", Model.LocationID))">
                     <option disabled selected>Please Select</option>
                 </select>
             </div>

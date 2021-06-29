@@ -18,6 +18,7 @@ namespace Pantree.Core.Controllers
             return View();
         }
 
+        #region Location
         public IActionResult Location(int id)
         {
             var model = WarehouseService.GetLocation(id, UserID);
@@ -27,12 +28,6 @@ namespace Pantree.Core.Controllers
                 store.Items = ProductService.GetItems(store.StoreID);
             }
 
-            return View(model);
-        }
-
-        public IActionResult Store(int id)
-        {
-            var model = WarehouseService.GetStore(id);
             return View(model);
         }
 
@@ -52,10 +47,41 @@ namespace Pantree.Core.Controllers
             return View(location);
         }
 
-        public IActionResult CreateStore()
+        [HttpPost]
+        public IActionResult DeleteLocation(int LocationID)
+        {
+            var location = WarehouseService.GetLocation(LocationID, UserID);
+            foreach (var store in location.Stores)
+            {
+                store.Items = ProductService.GetItems(store.StoreID);
+                foreach (var item in store.Items)
+                {
+                    ProductService.DeleteItem(item.ItemID);
+                }
+                WarehouseService.DeleteStore(store.StoreID);
+            }
+            WarehouseService.DeleteLocation(LocationID, UserID);
+
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region Store
+        public IActionResult Store(int id)
+        {
+            var model = WarehouseService.GetStore(id);
+            return View(model);
+        }
+
+        public IActionResult CreateStore(int? id)
         {
             var model = new StoreCreate();
             model.Locations = WarehouseService.GetLocations(UserID);
+
+            if (id != null)
+            {
+                model.LocationID = (int)id;
+            }
 
             return View(model);
         }
@@ -72,11 +98,26 @@ namespace Pantree.Core.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteStore(StoreDelete store)
+        {
+            var storeObj = WarehouseService.GetStore(store.StoreID);
+            foreach (var item in storeObj.Items)
+            {
+                ProductService.DeleteItem(item.ItemID);
+            }
+            WarehouseService.DeleteStore(store.StoreID, UserID);
+
+            return RedirectToAction("Location", new { id = store.LocationID });
+        }
+
+        [HttpPost]
         public JsonResult GetStores(int param)
         {
             var list = WarehouseService.GetStores(param, UserID);
 
             return Json(list);
         }
+        #endregion
     }
 }

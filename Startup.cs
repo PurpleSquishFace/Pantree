@@ -41,6 +41,7 @@ namespace Pantree.Core
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
+                options.IdleTimeout = TimeSpan.FromDays(1);
                 options.Cookie.HttpOnly = true;
             });
 

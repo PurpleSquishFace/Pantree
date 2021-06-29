@@ -4,13 +4,17 @@
     <h2>New</h2>
     <ul>
         <li><a asp-controller="Warehouse" asp-action="CreateLocation">Location</a></li>
-        <li><a asp-controller="Warehouse" asp-action="CreateStore">Store</a></li>
+        @if (Model.Count > 0)
+        {
+            <li><a asp-controller="Warehouse" asp-action="CreateStore">Store</a></li>
+        }
     </ul>
 
-    <hr />
 
     @foreach (var location in Model)
     {
+        <hr />
+
         <a asp-controller="Warehouse" asp-action="Location" asp-route-id="@location.LocationID">
             <h2>@location.LocationName</h2>
         </a>

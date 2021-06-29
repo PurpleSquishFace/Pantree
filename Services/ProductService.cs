@@ -119,5 +119,23 @@ namespace Pantree.Core.Services
 
             return success;
         }
+
+        public bool DeleteItem(int storeID)
+        {
+            bool success;
+            try
+            {
+                var item = db.GetItem<tbl_Items>(storeID);
+                db.DeleteItem(item);
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+                throw e;
+            }
+
+            return success;
+        }
     }
 }

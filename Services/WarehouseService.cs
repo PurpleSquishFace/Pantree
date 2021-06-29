@@ -78,5 +78,57 @@ namespace Pantree.Core.Services
             location.Stores = db.GetStores<StoreView>(locationID, userID);
             return location;
         }
+
+        public bool DeleteStore(int storeID, int userID)
+        {
+            var success = DeleteStore(storeID);
+            CurrentUser.UpdateLocations(userID);
+
+            return success;
+        }
+
+        public bool DeleteStore(int storeID)
+        {
+            bool success;
+            try
+            {
+                var store = db.GetStore<tbl_Stores>(storeID);
+                db.DeleteStore(store);
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
+            return success;
+        }
+
+        public bool DeleteLocation(int locationID, int userID)
+        {
+            var success = DeleteLocation(locationID);
+            CurrentUser.UpdateLocations(userID);
+
+            return success;
+        }
+
+        public bool DeleteLocation(int locationID)
+        {
+            bool success;
+            try
+            {
+                var location = db.GetLocation<tbl_Locations>(locationID);
+                db.DeleteLocation(location);
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return success;
+        }
     }
 }

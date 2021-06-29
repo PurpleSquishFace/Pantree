@@ -44,22 +44,27 @@ namespace Pantree.Core.AppModels
 
         public static void UpdateLocations(int userID)
         {
-            if (SessionUser.Details.id == userID)
+            var sessionUser = SessionUser;
+
+            if (sessionUser.Details.id == userID)
             {
-                SessionUser.Locations = GetLocations(SessionUser.Details.id);
+                var locations = GetLocations(sessionUser.Details.id);
+                sessionUser.Locations = locations;
+
+                SessionUser = sessionUser;
             }
         }
 
         public static void UpdateProfileImage(int userID, int profileImageID)
         {
-            if (SessionUser.Details.id == userID)
+            var sessionUser = SessionUser;
+
+            if (sessionUser.Details.id == userID)
             {
-                var user = SessionUser;
-
                 var profileImage = GetProfileImage(profileImageID);
-                user.ProfileImage = profileImage;
+                sessionUser.ProfileImage = profileImage;
 
-                SessionUser = user;
+                SessionUser = sessionUser;
             }
         }
 
