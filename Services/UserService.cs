@@ -90,7 +90,7 @@ namespace Pantree.Core.Services
             return list;
         }
 
-        public List<FriendView> SearchUserName(string searchTerm, int userID)
+        public List<FriendView> SearchUsers(string searchTerm, int userID)
         {
             if (searchTerm.Length < 4) return new List<FriendView>();
             return db.SearchUsers<FriendView>(searchTerm, userID);
