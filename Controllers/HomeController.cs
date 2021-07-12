@@ -15,7 +15,7 @@ namespace Pantree.Core.Controllers
     public class HomeController : BaseController
     {
         public IActionResult Index()
-        {            
+        {
             return View();
         }
 

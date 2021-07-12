@@ -22,7 +22,9 @@ namespace Pantree.Core.Controllers
 
         public IActionResult Manage()
         {
-            return View();
+            var user = CurrentUser.Details(UserID);
+
+            return View(user);
         }
 
         public IActionResult Register()

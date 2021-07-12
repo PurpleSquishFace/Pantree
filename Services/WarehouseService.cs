@@ -65,36 +65,29 @@ namespace Pantree.Core.Services
             return db.GetStores<StoreView>(locationID, userID);
         }
 
-        public StoreView GetStore (int storeID)
+        public StoreView GetStore (int storeID, int userID)
         {
-            var store = db.GetStore<StoreView>(storeID);
+            var store = db.GetStore<StoreView>(storeID, userID);
             store.Items = db.GetItems<ItemView>(storeID);
             return store;
         }
 
         public LocationView GetLocation(int locationID, int userID)
         {
-            var location = db.GetLocation<LocationView>(locationID);
+            var location = db.GetLocation<LocationView>(locationID, userID);
             location.Stores = db.GetStores<StoreView>(locationID, userID);
             return location;
         }
 
         public bool DeleteStore(int storeID, int userID)
         {
-            var success = DeleteStore(storeID);
-            CurrentUser.UpdateLocations(userID);
-
-            return success;
-        }
-
-        public bool DeleteStore(int storeID)
-        {
             bool success;
             try
             {
-                var store = db.GetStore<tbl_Stores>(storeID);
+                var store = db.GetStore<tbl_Stores>(storeID, userID);
                 db.DeleteStore(store);
 
+                CurrentUser.UpdateLocations(userID);
                 success = true;
             }
             catch (Exception e)
@@ -105,21 +98,15 @@ namespace Pantree.Core.Services
             return success;
         }
 
-        public bool DeleteLocation(int locationID, int userID)
-        {
-            var success = DeleteLocation(locationID);
-            CurrentUser.UpdateLocations(userID);
-
-            return success;
-        }
-
-        public bool DeleteLocation(int locationID)
+       public bool DeleteLocation(int locationID, int userID)
         {
             bool success;
             try
             {
-                var location = db.GetLocation<tbl_Locations>(locationID);
+                var location = db.GetLocation<tbl_Locations>(locationID, userID);
                 db.DeleteLocation(location);
+
+                CurrentUser.UpdateLocations(userID);
 
                 success = true;
             }
@@ -129,6 +116,51 @@ namespace Pantree.Core.Services
             }
 
             return success;
+        }
+
+        public bool ShareLocation(LocationShareCreate sharedLocation)
+        {
+            bool success;
+            try
+            {
+                var locations = db.GetSharedLocations<LocationShareCreate>(sharedLocation.SharedUserID);
+                if (locations.Where(i => i.SharedLocationID == sharedLocation.SharedUserID).FirstOrDefault() == null)
+                {
+                    var contract = sharedLocation.Adapt<tbl_SharedLocations>();
+                    db.ShareLocation(contract);
+                }
+
+                success = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return success;
+        }
+
+        public List<LocationView> GetSharedLocations(int userID)
+        {
+            var locations = db.GetSharedLocations<LocationView>(userID);
+
+            foreach (var location in locations)
+            {
+                location.Stores = db.GetStores<StoreView>(location.LocationID, userID);
+            }
+
+            return locations;
+        }
+        public List<LocationView> GetAllLocations(int userID)
+        {
+            var locations = db.GetAllLocations<LocationView>(userID);
+
+            foreach (var location in locations)
+            {
+                location.Stores = db.GetStores<StoreView>(location.LocationID, userID);
+            }
+
+            return locations;
         }
     }
 }

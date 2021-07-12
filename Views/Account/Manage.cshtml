@@ -1,15 +1,18 @@
-﻿
+﻿@model AspNetUser
+
 @{
     ViewData["Title"] = "Account";
 }
 
 
-@CurrentUser.Details(User.UserID<int>()).UserName<br />
-@CurrentUser.Details(User.UserID<int>()).Name<br />
-@CurrentUser.Details(User.UserID<int>()).Email<br />
-@CurrentUser.Details(User.UserID<int>()).id<br />
+@Model.UserName<br />
+@Model.Name<br />
+@Model.Email<br />
+@Model.id<br />
 
-<a asp-controller="Account" asp-action="ProfileImage">Update Profile Image</a> <br />
-<a asp-controller="Account" asp-action="Friends">Friends</a> <br />
+<a asp-controller="Account" asp-action="ProfileImage">Update Profile Image</a>
+<br />
+<a asp-controller="Account" asp-action="Friends">Friends</a>
+<br />
 <a asp-controller="Account" asp-action="LogOut">Log Out</a>
 

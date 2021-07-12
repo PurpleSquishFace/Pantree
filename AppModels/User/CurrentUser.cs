@@ -71,7 +71,7 @@ namespace Pantree.Core.AppModels
         private static List<LocationView> GetLocations(int userID)
         {
             WarehouseService warehouseService = new WarehouseService();
-            var locations = warehouseService.GetLocations(userID);
+            var locations = warehouseService.GetAllLocations(userID);
 
             foreach (var location in locations)
             {

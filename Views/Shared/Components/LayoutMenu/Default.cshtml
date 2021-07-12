@@ -16,7 +16,7 @@
         <hr />
 
         <a asp-controller="Warehouse" asp-action="Location" asp-route-id="@location.LocationID">
-            <h2>@location.LocationName</h2>
+            <h2>@location.LocationName @(!location.LocationOwner ? "(Shared)" : "")</h2>
         </a>
         <ul>
             @foreach (var store in location.Stores)

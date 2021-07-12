@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Pantree.Core.AppModels;
 using Pantree.Core.Services;
@@ -12,6 +13,7 @@ namespace Pantree.Core.Controllers
     {
         private readonly WarehouseService WarehouseService = new WarehouseService();
         private readonly ProductService ProductService = new ProductService();
+        private readonly UserService UserService = new UserService();
 
         public IActionResult Index()
         {
@@ -58,18 +60,43 @@ namespace Pantree.Core.Controllers
                 {
                     ProductService.DeleteItem(item.ItemID);
                 }
-                WarehouseService.DeleteStore(store.StoreID);
+                WarehouseService.DeleteStore(store.StoreID, UserID);
             }
             WarehouseService.DeleteLocation(LocationID, UserID);
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult ShareLocation(int? id)
+        {
+            var model = new LocationShareView();
+            model.Friends = UserService.GetFriends(UserID).Where(i => i.Accepted).Select(i => i.Adapt<UserListView>()).ToList();
+            model.Locations = WarehouseService.GetLocations(UserID);
+
+            if (id != null)
+            {
+                model.SharedLocationID = (int)id;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ShareLocation(LocationShareCreate sharedLocation)
+        {
+            if (WarehouseService.ShareLocation(sharedLocation))
+            {
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("ShareLocation");
         }
         #endregion
 
         #region Store
         public IActionResult Store(int id)
         {
-            var model = WarehouseService.GetStore(id);
+            var model = WarehouseService.GetStore(id, UserID);
             return View(model);
         }
 
@@ -101,7 +128,7 @@ namespace Pantree.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteStore(StoreDelete store)
         {
-            var storeObj = WarehouseService.GetStore(store.StoreID);
+            var storeObj = WarehouseService.GetStore(store.StoreID, UserID);
             foreach (var item in storeObj.Items)
             {
                 ProductService.DeleteItem(item.ItemID);

@@ -12,14 +12,14 @@ namespace Pantree.Core.DataAccess
 {
     public partial class DataConnection
     {
-        public T GetLocation<T>(int locationID)
+        public T GetLocation<T>(int locationID, int userID)
         {
             T location = default;
-            string sql = "SELECT * FROM Storage.tbl_Locations WHERE LocationID = @locationID";
+            string sql = "SELECT *, CASE WHEN UserID = @userID THEN 1 ELSE 0 END AS LocationOwner FROM Storage.tbl_Locations WHERE LocationID = @locationID";
 
             using (var connection = new SqlConnection(Configuration.ConnectionString))
             {
-                location = connection.QuerySingleOrDefault<T>(sql, new { locationID });
+                location = connection.QuerySingleOrDefault<T>(sql, new { locationID, userID });
             }
 
             return location;
@@ -28,7 +28,7 @@ namespace Pantree.Core.DataAccess
         public List<T> GetLocations<T>(int userID)
         {
             List<T> list = new List<T>();
-            string sql = "SELECT * FROM Storage.tbl_Locations WHERE UserID = @userID";
+            string sql = "SELECT *, 1 AS LocationOwner FROM Storage.tbl_Locations WHERE UserID = @userID";
 
             using (var connection = new SqlConnection(Configuration.ConnectionString))
             {
@@ -62,14 +62,14 @@ namespace Pantree.Core.DataAccess
         }
 
 
-        public T GetStore<T>(int storeID)
+        public T GetStore<T>(int storeID, int userID)
         {
             T store = default;
-            string sql = "SELECT * FROM Storage.tbl_Stores WHERE StoreID = @storeID";
+            string sql = "SELECT *, CASE WHEN UserID = @userID THEN 1 ELSE 0 END AS StoreOwner FROM Storage.tbl_Stores WHERE StoreID = @storeID";
 
             using (var connection = new SqlConnection(Configuration.ConnectionString))
             {
-                store = connection.QuerySingleOrDefault<T>(sql, new { storeID });
+                store = connection.QuerySingleOrDefault<T>(sql, new { storeID, userID });
             }
 
             return store;
@@ -78,7 +78,7 @@ namespace Pantree.Core.DataAccess
         public List<T> GetStores<T>(int locationID, int userID)
         {
             List<T> list = new List<T>();
-            string sql = "SELECT * FROM Storage.tbl_Stores WHERE LocationID = @locationID AND UserID = @userID";
+            string sql = "SELECT *, CASE WHEN UserID = @userID THEN 1 ELSE 0 END AS StoreOwner FROM Storage.tbl_Stores WHERE LocationID = @locationID;";
 
             using (var connection = new SqlConnection(Configuration.ConnectionString))
             {
@@ -151,6 +151,51 @@ namespace Pantree.Core.DataAccess
                     connection.Update(item);
                 }
             }
+        }
+
+        public void ShareLocation(tbl_SharedLocations sharedLocation)
+        {
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                if (sharedLocation.SharedID == 0)
+                {
+                    connection.Insert(sharedLocation);
+                }
+                else
+                {
+                    connection.Update(sharedLocation);
+                }
+            }
+        }
+
+        public List<T> GetSharedLocations<T>(int sharedUserID)
+        {
+            List<T> list = new List<T>();
+            string sql = "SELECT *, 0 AS LocationOwner FROM Storage.tbl_SharedLocations T1 " +
+                         "INNER JOIN Storage.tbl_Locations T2 ON T1.SharedLocationID = T2.LocationID WHERE SharedUserID = @sharedUserID";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                list = connection.Query<T>(sql, new { sharedUserID }).ToList();
+            }
+
+            return list;
+        }
+
+        public List<T> GetAllLocations<T>(int userID)
+        {
+            List<T> list = new List<T>();
+            string sql = "SELECT *, 1 AS LocationOwner FROM Storage.tbl_Locations T1 WHERE T1.UserID = @userID UNION " +
+                         "SELECT T2.*, 0 AS LocationOwner FROM Storage.tbl_SharedLocations T1 " +
+                         "INNER JOIN Storage.tbl_Locations T2 ON T1.SharedLocationID = T2.LocationID " +
+                         "WHERE T1.SharedUserID = @userID";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                list = connection.Query<T>(sql, new { userID }).ToList();
+            }
+
+            return list;
         }
     }
 }

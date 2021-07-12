@@ -6,11 +6,16 @@
 
 <h2>@Model.LocationName</h2>
 
-<a asp-controller="Warehouse" asp-action="CreateStore" asp-route-id="@Model.LocationID">Add Store</a>
-<form asp-controller="Warehouse" asp-action="DeleteLocation" method="post">
-    <input asp-for="LocationID" type="hidden" />
-    <button type="submit">Delete Location</button>
-</form>
+@if (Model.LocationOwner)
+{
+    <a asp-controller="Warehouse" asp-action="CreateStore" asp-route-id="@Model.LocationID">Add Store</a>
+    <a asp-controller="Warehouse" asp-action="ShareLocation" asp-route-id="@Model.LocationID">Share Location</a>
+
+    <form asp-controller="Warehouse" asp-action="DeleteLocation" method="post">
+        <input asp-for="LocationID" type="hidden" />
+        <button type="submit">Delete Location</button>
+    </form>
+}
 
 <br />
 

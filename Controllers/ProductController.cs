@@ -47,7 +47,7 @@ namespace Pantree.Core.Controllers
 
                 model.ItemStoreSelect = new ItemStoreSelect(
                     model.ProductView.ProductID,
-                    WarehouseService.GetLocations(UserID)
+                    WarehouseService.GetAllLocations(UserID)
                 );
             }
 
@@ -83,7 +83,7 @@ namespace Pantree.Core.Controllers
 
             model.ItemStoreSelect = model.ProductView == null ? new ItemStoreSelect() : new ItemStoreSelect(
                 model.ProductView.ProductID,
-                WarehouseService.GetLocations(UserID)
+                WarehouseService.GetAllLocations(UserID)
             );
 
             return PartialView("ScanResult", model);
@@ -94,7 +94,7 @@ namespace Pantree.Core.Controllers
         {
             var model = new ItemCreate();
 
-            var store = WarehouseService.GetStore(selected.StoreID);
+            var store = WarehouseService.GetStore(selected.StoreID, UserID);
             var item = ProductService.GetItem(selected.ProductID, selected.StoreID);
             var product = ProductService.GetProduct(selected.ProductID);
 
