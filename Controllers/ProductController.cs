@@ -38,6 +38,13 @@ namespace Pantree.Core.Controllers
                         model.LoadProductSuccessful = apiObj.LoadSuccessful;
                         model.ProductView = ProductService.CreateAndGetProduct(apiObj.Product);
                     }
+                    else
+                    {
+                        model.ProductCreate = new ProductCreate()
+                        {
+                            ProductCode = barcode.OutputCode
+                        };
+                    }
                 }
                 else
                 {
@@ -73,6 +80,13 @@ namespace Pantree.Core.Controllers
                 {
                     model.LoadProductSuccessful = apiObj.LoadSuccessful;
                     model.ProductView = ProductService.CreateAndGetProduct(apiObj.Product);
+                }
+                else
+                {
+                    model.ProductCreate = new ProductCreate
+                    {
+                        ProductCode = code
+                    };
                 }
             }
             else
@@ -113,6 +127,15 @@ namespace Pantree.Core.Controllers
         {
             ProductService.SaveItem(item);
 
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(ProductCreate item)
+        {
+            ProductService.CreateProduct(new FoodFactsProduct(item.ProductCode, item.ProductName, string.Empty, item.IngredientList));
+            
+            //return PartialView("ScanResult", model);
             return RedirectToAction("Index", "Home");
         }
     }

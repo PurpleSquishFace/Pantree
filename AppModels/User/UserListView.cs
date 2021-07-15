@@ -13,7 +13,10 @@ namespace Pantree.Core.AppModels
 
         public string ListName
         {
-            get => $"{UserName} ({Name})";
+            get
+            {
+                return $"{UserName} ({Name})"; 
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Pantree.Core.AppModels
         public bool LoadProductSuccessful { get; set; }
         public ProductView ProductView { get; set; }
         public ItemStoreSelect ItemStoreSelect { get; set; }
+        public ProductCreate ProductCreate { get; set; }
 
         public ResultView()
         {

@@ -1,0 +1,40 @@
+﻿@model ProductCreate
+
+<div class="status-icon">
+    <i class="error fas fa-times"></i>
+    <span class="error-message">Oh dear, we can't find a product that matches your barcode...</span>
+</div>
+
+<br />
+
+<form id="AddProduct" asp-controller="Product" asp-action="AddProduct" method="post">
+
+    <div class="container-input">
+        <div class="input">
+            <label asp-for="ProductCode"></label>
+            <input asp-for="ProductCode" />
+        </div>
+        <span asp-validation-for="ProductCode"></span>
+    </div>
+
+    <div class="container-input">
+        <div class="input">
+            <label asp-for="ProductName"></label>
+            <input asp-for="ProductName" />
+        </div>
+        <span asp-validation-for="ProductName"></span>
+    </div>
+
+    <div class="container-input">
+        <div class="input">
+            <label asp-for="IngredientList"></label>
+            <textarea asp-for="IngredientList" />
+        </div>
+        <span asp-validation-for="IngredientList"></span>
+    </div>
+
+    <div class="container-center">
+        <button type="submit">Add</button>
+    </div>
+
+</form>
