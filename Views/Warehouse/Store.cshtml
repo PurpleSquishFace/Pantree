@@ -18,6 +18,26 @@
 <ul>
     @foreach (var item in Model.Items)
     {
-        <li>@item.ItemName (Qty. @item.Quantity)</li>
+        <li>
+            @item.ItemName (Qty. @item.Quantity)
+
+            <form>
+                <input name="ItemID" value="@item.ItemID" type="hidden" />
+                <input name="Quantity" value="@item.Quantity" type="text" inputmode="numeric" pattern="[0-9]*" />
+                <button type="submit">Update</button>
+            </form>
+        </li>
     }
 </ul>
+
+@section scripts
+{
+    <script>
+
+        $('body').on('input', 'input[inputmode="numeric"]', function () {
+            var $input = $(this);
+            $input.val($input.val().replace(/[^\d]+/g, ''));
+        });
+
+    </script>
+}
