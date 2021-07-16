@@ -133,10 +133,19 @@ namespace Pantree.Core.Controllers
         [HttpPost]
         public IActionResult AddProduct(ProductCreate item)
         {
-            ProductService.CreateProduct(new FoodFactsProduct(item.ProductCode, item.ProductName, string.Empty, item.IngredientList));
-            
-            //return PartialView("ScanResult", model);
-            return RedirectToAction("Index", "Home");
+            var newProduct = new FoodFactsProduct(item.ProductCode, item.ProductName, string.Empty, item.IngredientList);
+
+            var model = new ResultView
+            {
+                ProductView = ProductService.CreateAndGetProduct(newProduct),
+                Code = newProduct.ProductCode,
+                ScanSuccessful = true,
+                LoadProductSuccessful = true
+            };
+
+            model.ItemStoreSelect = new ItemStoreSelect(model.ProductView.ProductID, WarehouseService.GetAllLocations(UserID));
+
+            return PartialView("ScanResult", model);
         }
     }
 }
