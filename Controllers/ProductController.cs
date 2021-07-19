@@ -154,7 +154,17 @@ namespace Pantree.Core.Controllers
             ProductService.UpdateItemQuantity(itemQuantity);
             var model = ProductService.GetItem(itemQuantity.ItemID);
 
-            return PartialView("~/Views/Warehouse/ItemListView.cshtml", model);
+            return RedirectToAction("Store", "Warehouse", new { id = itemQuantity.StoreID });
+            //return PartialView("~/Views/Warehouse/ItemListView.cshtml", model);
+        }
+
+        [HttpPost]
+        public IActionResult AddToShoppingList(ShoppingListCreate listItem)
+        {
+            listItem.UserID = UserID;
+            ProductService.AddShoppingListItem(listItem);
+
+            return RedirectToAction("Store", "Warehouse", new { id = listItem.StoreID });
         }
     }
 }

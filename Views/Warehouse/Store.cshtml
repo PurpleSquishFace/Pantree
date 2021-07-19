@@ -15,8 +15,19 @@
     </form>
 }
 
+<h3>Items</h3>
+
 <ul>
-    @foreach (var item in Model.Items)
+    @foreach (var item in Model.Items.Where(i => i.Quantity > 0))
+    {
+        <partial name="ItemListView" model="item" />
+    }
+</ul>
+
+<h3>Past Items</h3>
+
+<ul>
+    @foreach (var item in Model.Items.Where(i => i.Quantity < 1))
     {
         <partial name="ItemListView" model="item" />
     }

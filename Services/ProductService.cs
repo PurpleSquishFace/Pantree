@@ -160,5 +160,22 @@ namespace Pantree.Core.Services
 
             return success;
         }
+
+        public bool AddShoppingListItem(ShoppingListCreate listItem)
+        {
+            bool success;
+            try
+            {   
+                var shoppingListItem = listItem.Adapt<tbl_ShoppingList>();
+                db.AddShoppingListItem(shoppingListItem);
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+                throw e;
+            }
+            return success;
+        }
     }
 }

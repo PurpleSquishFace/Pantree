@@ -86,5 +86,23 @@ namespace Pantree.Core.DataAccess
                 connection.Query(sql, new { itemID, quantity });
             }
         }
+
+        public int AddShoppingListItem(tbl_ShoppingList listItem)
+        {
+            int shoppingListID;
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                if (listItem.ShoppingListID == 0)
+                {
+                    shoppingListID = (int)connection.Insert(listItem);
+                }
+                else
+                {
+                    connection.Update(listItem);
+                    shoppingListID = listItem.ShoppingListID;
+                }
+            }
+            return shoppingListID;
+        }
     }
 }
