@@ -76,5 +76,15 @@ namespace Pantree.Core.DataAccess
                 connection.Delete(item);
             }
         }
+
+        public void UpdateItemQuantity(int itemID, int quantity)
+        {
+            string sql = "UPDATE Products.tbl_Items SET Quantity = @quantity WHERE ItemID = @itemID;";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Query(sql, new { itemID, quantity });
+            }
+        }
     }
 }

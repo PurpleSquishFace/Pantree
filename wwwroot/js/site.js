@@ -64,3 +64,25 @@ $('body').on('submit', '.load-partial', function () {
 
     return false;
 });
+
+//------------------- Number inputs -------------------//
+
+$('body').on('input', 'input[inputmode="numeric"]', function () {
+    var $input = $(this);
+    $input.val($input.val().replace(/[^\d]+/g, ''));
+});
+
+$('body').on('keydown', 'input[inputmode="numeric"]', function (e) {
+    let input = $(this);
+    let val = input.val();
+
+    if (e.keyCode == 38) {
+        val = Number(input.val()) + Number(1);
+    }
+    if (e.keyCode == 40) {
+        val = Number(input.val()) - Number(1);
+        val = val < 0 ? 0 : val;
+    }
+    input.focus().val(val);
+
+});

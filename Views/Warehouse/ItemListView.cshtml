@@ -1,0 +1,12 @@
+﻿@model ItemView
+
+<li id="ItemList_@Model.ItemID">
+    @Model.ItemName (Qty. @Model.Quantity)
+
+    <form id="UpdateItemQuantity_@Model.ItemID" asp-controller="Product" asp-action="UpdateQuantity" method="post" class="load-partial" attr-partial="ItemList_@Model.ItemID">
+        <input asp-for="ItemID" type="hidden" />
+        <input asp-for="Quantity" type="text" inputmode="numeric" pattern="[0-9]*" />
+        <button type="submit">Update</button>
+    </form>
+    <br />
+</li>

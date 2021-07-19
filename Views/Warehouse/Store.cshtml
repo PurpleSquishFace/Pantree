@@ -7,7 +7,7 @@
 <h2>@Model.StoreName</h2>
 
 @if (Model.StoreOwner)
-{
+{       
     <form asp-controller="Warehouse" asp-action="DeleteStore" method="post">
         <input asp-for="LocationID" type="hidden" />
         <input asp-for="StoreID" type="hidden" />
@@ -18,26 +18,6 @@
 <ul>
     @foreach (var item in Model.Items)
     {
-        <li>
-            @item.ItemName (Qty. @item.Quantity)
-
-            <form>
-                <input name="ItemID" value="@item.ItemID" type="hidden" />
-                <input name="Quantity" value="@item.Quantity" type="text" inputmode="numeric" pattern="[0-9]*" />
-                <button type="submit">Update</button>
-            </form>
-        </li>
+        <partial name="ItemListView" model="item" />
     }
 </ul>
-
-@section scripts
-{
-    <script>
-
-        $('body').on('input', 'input[inputmode="numeric"]', function () {
-            var $input = $(this);
-            $input.val($input.val().replace(/[^\d]+/g, ''));
-        });
-
-    </script>
-}

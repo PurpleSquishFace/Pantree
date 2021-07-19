@@ -78,6 +78,11 @@ namespace Pantree.Core.Services
             return db.GetItem<ItemView>(productID, storeID);
         }
 
+        public ItemView GetItem(int itemID)
+        {
+            return db.GetItem<ItemView>(itemID);
+        }
+
         public List<ItemView> GetItems(int storeID)
         {
             return db.GetItems<ItemView>(storeID);
@@ -127,6 +132,24 @@ namespace Pantree.Core.Services
             {
                 var item = db.GetItem<tbl_Items>(storeID);
                 db.DeleteItem(item);
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+                throw e;
+            }
+
+            return success;
+        }
+
+        public bool UpdateItemQuantity(ItemQuantity itemQuantity)
+        {
+            bool success;
+
+            try
+            {
+                db.UpdateItemQuantity(itemQuantity.ItemID, itemQuantity.Quantity);
                 success = true;
             }
             catch (Exception e)

@@ -147,5 +147,14 @@ namespace Pantree.Core.Controllers
 
             return PartialView("ScanResult", model);
         }
+
+        [HttpPost]
+        public IActionResult UpdateQuantity (ItemQuantity itemQuantity)
+        {
+            ProductService.UpdateItemQuantity(itemQuantity);
+            var model = ProductService.GetItem(itemQuantity.ItemID);
+
+            return PartialView("~/Views/Warehouse/ItemListView.cshtml", model);
+        }
     }
 }
