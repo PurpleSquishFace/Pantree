@@ -1,0 +1,25 @@
+﻿@model List<ShoppingListView>
+
+@{
+    ViewData["Title"] = "Shopping List";
+}
+
+<h2>Shopping List</h2>
+
+<ul>
+    @foreach (var listItem in Model)
+    {
+    }
+
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <li>
+            <input id="listItem_@i" type="checkbox" value="@Model[i].Purchased" />
+            <label for="listItem_@i">@Model[i].ItemName</label>
+            <form id="RemoveFromList_@Model[i].ShoppingListID" asp-controller="ShoppingList" asp-action="RemoveFromShoppingList" method="post">
+                <input name="ShoppingListID" value="@Model[i].ShoppingListID" type="hidden" />
+                <button type="submit">Remove</button>
+            </form>
+        </li>
+    }
+</ul>

@@ -87,6 +87,34 @@ namespace Pantree.Core.DataAccess
             }
         }
 
+        public List<T> GetShoppingList<T>(int userID)
+        {
+            List<T> list = new List<T>();
+            string sql = "SELECT T1.ShoppingListID, T1.UserID, T1.ItemID, T1.Purchased, T2.ItemName " +
+                "FROM Products.tbl_ShoppingList T1 INNER JOIN Products.tbl_Items T2 ON T1.ItemID = T2.ItemID " +
+                "WHERE T1.UserID = @userID AND T2.Deleted <> 1";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                list = connection.Query<T>(sql, new { userID }).ToList();
+            }
+
+            return list;
+        }
+
+        public T GetShoppingListItem<T>(int itemID, int userID)
+        {
+            T item = default;
+            string sql = "SELECT * FROM Products.tbl_ShoppingList WHERE ItemID = @itemID AND UserID = @userID;";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                item = connection.QuerySingleOrDefault<T>(sql, new { itemID, userID });
+            }
+
+            return item;
+        }
+
         public int AddShoppingListItem(tbl_ShoppingList listItem)
         {
             int shoppingListID;
@@ -103,6 +131,16 @@ namespace Pantree.Core.DataAccess
                 }
             }
             return shoppingListID;
+        }
+
+        public void RemoveShoppingListItem(int shoppingListID)
+        {
+            string sql = "DELETE FROM Products.tbl_ShoppingList WHERE ShoppingListID = @shoppingListID";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Query(sql, new { shoppingListID });
+            }
         }
     }
 }

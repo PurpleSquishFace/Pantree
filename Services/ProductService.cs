@@ -34,7 +34,7 @@ namespace Pantree.Core.Services
                 var product = newProduct.Adapt<tbl_Products>();
                 product.CreatedDate = DateTime.Now;
 
-                db.SaveProduct(product);                
+                db.SaveProduct(product);
                 success = true;
             }
             catch (Exception e)
@@ -72,7 +72,7 @@ namespace Pantree.Core.Services
 
             return false;
         }
-        
+
         public ItemView GetItem(int productID, int storeID)
         {
             return db.GetItem<ItemView>(productID, storeID);
@@ -120,7 +120,7 @@ namespace Pantree.Core.Services
             {
 
                 throw e;
-            }           
+            }
 
             return success;
         }
@@ -161,13 +161,21 @@ namespace Pantree.Core.Services
             return success;
         }
 
+        public List<ShoppingListView> GetShoppingList(int userID)
+        {
+            return db.GetShoppingList<ShoppingListView>(userID);
+        }
+
         public bool AddShoppingListItem(ShoppingListCreate listItem)
         {
             bool success;
             try
-            {   
-                var shoppingListItem = listItem.Adapt<tbl_ShoppingList>();
-                db.AddShoppingListItem(shoppingListItem);
+            {
+                if (db.GetShoppingListItem<tbl_ShoppingList>(listItem.ItemID, listItem.UserID) == null)
+                {
+                    var shoppingListItem = listItem.Adapt<tbl_ShoppingList>();
+                    db.AddShoppingListItem(shoppingListItem);
+                }
                 success = true;
             }
             catch (Exception e)
@@ -175,6 +183,23 @@ namespace Pantree.Core.Services
                 success = false;
                 throw e;
             }
+            return success;
+        }
+
+        public bool RemoveShoppingListItem(int shoppingListID)
+        {
+            bool success;
+
+            try
+            {
+                db.RemoveShoppingListItem(shoppingListID);
+                success = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
             return success;
         }
     }

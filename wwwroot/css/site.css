@@ -456,3 +456,13 @@ table {
     text-align: left;
     width: 100%;
 }
+
+li {
+    display: flex;
+    width: 50%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
