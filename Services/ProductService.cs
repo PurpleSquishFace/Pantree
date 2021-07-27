@@ -163,7 +163,7 @@ namespace Pantree.Core.Services
 
         public List<ShoppingListView> GetShoppingList(int userID)
         {
-            return db.GetShoppingList<ShoppingListView>(userID);
+            return db.GetShoppingList<ShoppingListView>(userID).OrderBy(i => i.Purchased).ToList();
         }
 
         public bool AddShoppingListItem(ShoppingListCreate listItem)
@@ -176,6 +176,22 @@ namespace Pantree.Core.Services
                     var shoppingListItem = listItem.Adapt<tbl_ShoppingList>();
                     db.AddShoppingListItem(shoppingListItem);
                 }
+                success = true;
+            }
+            catch (Exception e)
+            {
+                success = false;
+                throw e;
+            }
+            return success;
+        }
+
+        public bool UpdateShoppingListPurchased(ShoppingListEdit listItem)
+        {
+            bool success;
+            try
+            {
+                db.UpdatePurchasedShoppingListItem(listItem.ShoppingListID, listItem.Purchased);
                 success = true;
             }
             catch (Exception e)

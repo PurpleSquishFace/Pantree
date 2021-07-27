@@ -133,6 +133,16 @@ namespace Pantree.Core.DataAccess
             return shoppingListID;
         }
 
+        public void UpdatePurchasedShoppingListItem(int shoppingListID, bool purchased)
+        {
+            string sql = "UPDATE Products.tbl_ShoppingList SET Purchased = @purchased WHERE ShoppingListID = @shoppingListID;";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Query(sql, new { shoppingListID, purchased });
+            }
+        }
+
         public void RemoveShoppingListItem(int shoppingListID)
         {
             string sql = "DELETE FROM Products.tbl_ShoppingList WHERE ShoppingListID = @shoppingListID";

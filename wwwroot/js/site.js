@@ -65,6 +65,13 @@ $('body').on('submit', '.load-partial', function () {
     return false;
 });
 
+//------------------- Form on change -------------------//
+
+$('body').on('change', '.submit-onchange', function () {
+    let form = $(this).closest('form');
+    form.submit();
+});
+
 //------------------- Number inputs -------------------//
 
 $('body').on('input', 'input[inputmode="numeric"]', function () {

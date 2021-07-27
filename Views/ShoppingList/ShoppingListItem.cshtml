@@ -1,0 +1,13 @@
+﻿@model ShoppingListView
+
+<li>
+    <form asp-controller="ShoppingList" asp-action="UpdatePurchasedListItem" method="post">
+        <input asp-for="ShoppingListID" type="hidden" />
+        <input asp-for="Purchased" id="listItem_@Model.ShoppingListID" class="submit-onchange" />
+        <label for="listItem_@Model.ShoppingListID">@Model.ItemName</label>
+    </form>
+    <form asp-controller="ShoppingList" asp-action="RemoveFromShoppingList" method="post">
+        <input asp-for="ShoppingListID" type="hidden" />
+        <button type="submit">Remove</button>
+    </form>
+</li>
