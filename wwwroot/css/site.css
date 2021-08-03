@@ -10,7 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #252525;
+    background-color: #7b0f96;
     color: #cccccc;
     font-size: 3rem;
     box-shadow: 0px 0px 15px 1px #252525;
@@ -23,6 +23,10 @@
 
     .navbar > * {
         margin: 0 3vw;
+    }
+
+    .navbar .logo{
+        height: 4rem;
     }
 
 .navbar-icon {
@@ -74,15 +78,15 @@
 
 .body-content {
     max-width: 800px;
-    min-height: calc(100vh - 5rem - 1px);
+    min-height: calc(100vh - 5rem);
+    height: calc(100vh - 5rem);
     margin: auto;
     border-left: thin solid #25252555;
     border-right: thin solid #25252555;
-    border-top: 1px solid transparent;
 }
 
 .content-main {
-    height: calc(100vh - 7rem - 1px);
+    height: calc(100vh - 7rem);
     padding: 1rem .5rem;
 }
 
@@ -365,7 +369,7 @@ img {
     .navbar-hamburger span {
         display: block;
         position: absolute;
-        height: 5px;
+        height: 3px;
         width: 100%;
         background: #cccccc;
         border-radius: 9px;
@@ -474,3 +478,63 @@ li {
     align-items: center;
     justify-content: space-between;
 }
+
+.page-header {
+    background: #3d0349;
+    color: #fbecff;
+    font-size: 1.5em;
+    padding: .5em;
+    margin: 0;
+    font-weight: unset;
+    height: 1em;
+}
+
+.manage-account-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    width: 100%;
+    height: calc(100% - 3em);
+    align-items: flex-start;
+}
+
+.account-menu {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 33%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: stretch;
+    border-right: solid 1px #bfbfbf;
+    background-color: #fbecff;
+}
+
+    .account-menu button {
+        height: 4em;
+        font-size: 1em;
+        text-align: left;
+        padding: 1em;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #3d0349;
+        transition: .5s;
+    }
+
+        .account-menu button:hover {
+            background-color: #f1b9ff;
+            transition: .5s;
+        }
+
+        .account-menu button.selected {
+            background-color: #c450e1;
+            color: #fbecff;
+            border-left: solid 5px #3d0349;
+            transition: .5s;
+        }

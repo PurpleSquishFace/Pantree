@@ -93,3 +93,36 @@ $('body').on('keydown', 'input[inputmode="numeric"]', function (e) {
     input.focus().val(val);
 
 });
+
+
+//------------------- Button Behaviour -------------------//
+
+$('body').on('click', 'button[load]', function () {
+
+    let partial = $(this).attr('partial');
+    let url = $(this).attr('load');
+
+    if (typeof partial !== 'undefined' && partial !== false) {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            success: function (result) {
+                console.log(result);
+                $('#' + partial).empty().html(result);           
+            }
+        });
+
+    } else {
+        window.location = url;
+    }
+});
+
+
+$('body').on('click', '.account-menu button', function () {
+    $('.account-menu button').each(function () {
+        $(this).removeClass('selected');
+    });
+
+    $(this).toggleClass('selected');
+})

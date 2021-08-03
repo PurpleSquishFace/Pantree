@@ -1,41 +1,34 @@
-﻿@{
-    ViewData["Title"] = "Profile Image";
-}
+﻿
+<h2>Profile Image</h2>
 
-<div class="content-main">
-
-    <h2>Profile Image</h2>
-
-    <div id="BtnUpload" class="container-center">
-        <div class="file-input">
-            <label for="LoadImage">Select Image <i class="fas fa-image btn-icon"></i></label>
-            <input id="LoadImage" name="LoadImage" type="file" accept="image/*" />
-        </div>
+<div id="BtnUpload" class="container-center">
+    <div class="file-input">
+        <label for="LoadImage">Select Image <i class="fas fa-image btn-icon"></i></label>
+        <input id="LoadImage" name="LoadImage" type="file" accept="image/*" />
     </div>
+</div>
 
-    <div class="container-center upload-reveal">
+<div class="container-center upload-reveal">
+    <div>
+        <canvas id="Image" class="image-profile-editor" />
+    </div>
+</div>
+
+<div class="container-center upload-reveal">
+    <div class="container-flex">
         <div>
-            <canvas id="Image" class="image-profile-editor" />
+            <form id="ProfileImageForm" asp-controller="Account" asp-action="UploadProfileImage" method="post" enctype="multipart/form-data">
+                <button id="CropImage" type="button" class="button">Use Selection <i class="fas fa-check btn-icon"></i></button>
+            </form>
         </div>
-    </div>
-
-    <div class="container-center upload-reveal">
-        <div class="container-flex">
-            <div>
-                <form id="ProfileImageForm" asp-controller="Account" asp-action="UploadProfileImage" method="post" enctype="multipart/form-data">
-                    <button id="CropImage" type="button" class="button">Use Selection <i class="fas fa-check btn-icon"></i></button>
-                </form>
-            </div>
-            <div>
-                <button id="Reload" type="button" class="button">Start Over <i class="fas fa-undo btn-icon"></i></button>
-            </div>
+        <div>
+            <button id="Reload" type="button" class="button">Start Over <i class="fas fa-undo btn-icon"></i></button>
         </div>
     </div>
 </div>
 
-@section scripts{
 
-    <script>
+<script>
 
         let canvas = $("#Image"),
             context = canvas.get(0).getContext("2d");
@@ -135,5 +128,5 @@
                 type: mimeString
             });
         }
-    </script>
-}
+
+</script>

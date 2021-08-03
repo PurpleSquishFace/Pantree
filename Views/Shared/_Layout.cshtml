@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Pantree</title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" href="/favicon.ico">
     @*<link rel="manifest" href="/site.webmanifest">*@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -36,12 +34,12 @@
             }
         </div>
         <div>
-            <a asp-controller="Home" asp-action="Index">Pantree</a>
+            <a asp-controller="Home" asp-action="Index"><img src="~/images/Pantree.jpg" class="logo" /></a>
         </div>
         <div class="navbar-icon">
             @if (User.Identity.IsAuthenticated)
             {
-                <a asp-controller="Account" asp-action="Manage">
+                <a asp-controller="Account" asp-action="Index">
                     @if (CurrentUser.Details(User.UserID<int>()).ProfileImageID == null)
                     {
                         <i class="fas fa-user-circle"></i>

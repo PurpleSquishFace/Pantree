@@ -20,7 +20,7 @@ namespace Pantree.Core.Controllers
             UserService = new UserService(userManager, signInManager);
         }
 
-        public IActionResult Manage()
+        public IActionResult Index()
         {
             var user = CurrentUser.Details(UserID);
 
@@ -71,9 +71,10 @@ namespace Pantree.Core.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
         public IActionResult ProfileImage()
         {
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
@@ -95,6 +96,7 @@ namespace Pantree.Core.Controllers
             return RedirectToAction("Manage");
         }
 
+        [HttpPost]
         public IActionResult Friends()
         {
             var model = new FriendMaster
@@ -102,7 +104,15 @@ namespace Pantree.Core.Controllers
                 UserList = UserService.GetFriends(UserID)
             };
 
-            return View(model);
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public IActionResult Details()
+        {
+            var user = CurrentUser.Details(UserID);
+
+            return PartialView(user);
         }
 
         [HttpPost]
