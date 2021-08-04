@@ -93,7 +93,7 @@ namespace Pantree.Core.Controllers
                 await ImageService.UpdateProfileImage(UserID, (int)profileImageID, profileImage);
             }
 
-            return RedirectToAction("Manage");
+            return PartialView("ProfileImage");
         }
 
         [HttpPost]
@@ -115,6 +115,17 @@ namespace Pantree.Core.Controllers
             return PartialView(user);
         }
 
+        [HttpPost]
+        public IActionResult UpdateDetails(UserEdit details)
+        {
+            details.UserId = UserID;
+            UserService.UpdateUserDetails(details);
+
+            var user = CurrentUser.Details(UserID);
+            return PartialView("Details", user);
+        }
+
+        #region Friends
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SearchUsers(FriendMaster search)
@@ -161,5 +172,6 @@ namespace Pantree.Core.Controllers
 
             return RedirectToAction("Friends");
         }
+        #endregion
     }
 }

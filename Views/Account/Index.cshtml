@@ -9,10 +9,11 @@
 <div class="manage-account-container">
     <div class="account-menu">
         <button load="/Account/Details" partial="accountContainer" class="selected"><i class="far fa-fw fa-list-alt"></i> Account Details</button>
-        <button load="/Account/ProfileImage" partial="accountContainer"><i class="far fa-fw fa-image"></i> Profile Image</button>
+        <button load="/Account/ProfileImage" partial="accountContainer" attr-callback="SetupCanvas"><i class="far fa-fw fa-image"></i> Profile Image</button>
         <button load="/Account/Friends" partial="accountContainer"><i class="fas fa-fw fa-user-friends"></i> Friends</button>
         <button load="/Account/LogOut"><i class="fas fa-fw fa-sign-out-alt"></i> Log Out</button>
     </div>
+
     <div id="accountContainer" class="account-main">
         <partial name="Details" model="Model" />
     </div>

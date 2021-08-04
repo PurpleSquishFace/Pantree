@@ -94,5 +94,14 @@ namespace Pantree.Core.DataAccess
             return list;
         }
 
+        public void UpdateUserDetails(int userId, string userName, string name, string email)
+        {
+            string sql = "UPDATE dbo.AspNetUsers SET UserName = @userName, Name = @name, Email = @email WHERE Id = @userId;";
+
+            using (var connection = new SqlConnection(Configuration.ConnectionString))
+            {
+                connection.Query(sql, new { userId, userName, name, email });
+            }
+        }
     }
 }

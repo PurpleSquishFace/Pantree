@@ -1,7 +1,28 @@
 ﻿@model FriendMaster
 
-<div>
+<div class="account-form">
+
     <h2>Friends</h2>
+
+    <h3>Search</h3>
+
+    <form asp-controller="Account" asp-action="SearchUsers" method="post" class="load-partial" attr-partial="SearchResult">
+
+        <div class="container-input">
+            <div class="input">
+                <label asp-for="SearchName"></label>
+                <input asp-for="SearchName" />
+            </div>
+            <span asp-validation-for="SearchName"></span>
+        </div>
+
+        <div class="container-center">
+            <button type="submit">Search</button>
+        </div>
+
+    </form>
+
+    <div id="SearchResult"></div>
 
     <br />
 
@@ -60,137 +81,113 @@
             </tbody>
         </table>
     }
-</div>
-
-<br />
-
-<div>
-    <h2>Requests</h2>
 
     <br />
 
-    @if (Model.UserList.Where(i => i.ResponsePending && !i.Blocked).ToList().Count <= 0)
-    {
-        <div>Nobody has sent you a request, perhaps find someone instead...</div>
-    }
-    else
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Username</th>
-                    <th>User</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var friend in Model.UserList.Where(i => i.ResponsePending && !i.Blocked))
-                {
+    <div>
+        <h2>Requests</h2>
+
+        <br />
+
+        @if (Model.UserList.Where(i => i.ResponsePending && !i.Blocked).ToList().Count <= 0)
+        {
+            <div>Nobody has sent you a request, perhaps find someone instead...</div>
+        }
+        else
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            @if (friend.ProfileImage == null)
-                            {
-                                <i class="fas fa-user-circle profile-image"></i>
-                            }
-                            else
-                            {
-                                <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
-                            }
-                        </td>
-                        <td>@friend.UserName</td>
-                        <td>@friend.Name</td>
-                        <td>
-                            <form asp-controller="Account" asp-action="AcceptFriend" method="post">
-                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                                <button type="submit">Accept</button>
-                            </form>
-                            <form asp-controller="Account" asp-action="RemoveFriend" method="post">
-                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                                <button type="submit">Decline</button>
-                            </form>
-                            <form asp-controller="Account" asp-action="BlockFriend" method="post">
-                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                                <button type="submit">Block</button>
-                            </form>
-                        </td>
+                        <th></th>
+                        <th>Username</th>
+                        <th>User</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
-<br />
-
-<div>
-    <h2>Blocked Users</h2>
-
+                </thead>
+                <tbody>
+                    @foreach (var friend in Model.UserList.Where(i => i.ResponsePending && !i.Blocked))
+                    {
+                        <tr>
+                            <td>
+                                @if (friend.ProfileImage == null)
+                                {
+                                    <i class="fas fa-user-circle profile-image"></i>
+                                }
+                                else
+                                {
+                                    <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
+                                }
+                            </td>
+                            <td>@friend.UserName</td>
+                            <td>@friend.Name</td>
+                            <td>
+                                <form asp-controller="Account" asp-action="AcceptFriend" method="post">
+                                    <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                    <button type="submit">Accept</button>
+                                </form>
+                                <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                    <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                    <button type="submit">Decline</button>
+                                </form>
+                                <form asp-controller="Account" asp-action="BlockFriend" method="post">
+                                    <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                    <button type="submit">Block</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
     <br />
 
-    @if (Model.UserList.Where(i => i.Blocked).ToList().Count <= 0)
-    {
-        <div>Good news, nobody has been blocked!</div>
-    }
-    else
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Username</th>
-                    <th>User</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var friend in Model.UserList.Where(i => i.Blocked))
-                {
+    <div>
+        <h2>Blocked Users</h2>
+
+        <br />
+
+        @if (Model.UserList.Where(i => i.Blocked).ToList().Count <= 0)
+        {
+            <div>Good news, nobody has been blocked!</div>
+        }
+        else
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            @if (friend.ProfileImage == null)
-                            {
-                                <i class="fas fa-user-circle profile-image"></i>
-                            }
-                            else
-                            {
-                                <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
-                            }
-                        </td>
-                        <td>@friend.UserName</td>
-                        <td>@friend.Name</td>
-                        <td>
-                            <form asp-controller="Account" asp-action="RemoveFriend" method="post">
-                                <input name="FriendUserID" value="@friend.Id" type="hidden" />
-                                <button type="submit">Unblock</button>
-                            </form>
-                        </td>
+                        <th></th>
+                        <th>Username</th>
+                        <th>User</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
+                </thead>
+                <tbody>
+                    @foreach (var friend in Model.UserList.Where(i => i.Blocked))
+                    {
+                        <tr>
+                            <td>
+                                @if (friend.ProfileImage == null)
+                                {
+                                    <i class="fas fa-user-circle profile-image"></i>
+                                }
+                                else
+                                {
+                                    <img class="profile-image" src="data:image;base64,@friend.ConvertedImage" alt="@friend.AlternativeText" />
+                                }
+                            </td>
+                            <td>@friend.UserName</td>
+                            <td>@friend.Name</td>
+                            <td>
+                                <form asp-controller="Account" asp-action="RemoveFriend" method="post">
+                                    <input name="FriendUserID" value="@friend.Id" type="hidden" />
+                                    <button type="submit">Unblock</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
 </div>
-
-<br />
-
-<div class="content-sign-in">
-    <h2>Search</h2>
-
-    <form asp-controller="Account" asp-action="SearchUsers" method="post" class="load-partial" attr-partial="SearchResult">
-
-        <div class="container-input">
-            <div class="input">
-                <label asp-for="SearchName"></label>
-                <input asp-for="SearchName" />
-            </div>
-            <span asp-validation-for="SearchName"></span>
-        </div>
-
-        <div class="container-center">
-            <button type="submit">Search</button>
-        </div>
-
-    </form>
-</div>
-
-<div id="SearchResult"></div>

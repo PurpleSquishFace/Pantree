@@ -126,6 +126,11 @@ namespace Pantree.Core.Services
             db.AcceptFriend(friendID);
         }
 
+        public void UpdateUserDetails(UserEdit details)
+        {
+            db.UpdateUserDetails(details.UserId, details.UserName, details.Name, details.Email);
+        }
+
         #region Sample database updates
 
         //public List<User> GetUsers()

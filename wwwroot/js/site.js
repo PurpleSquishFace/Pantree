@@ -94,13 +94,13 @@ $('body').on('keydown', 'input[inputmode="numeric"]', function (e) {
 
 });
 
-
 //------------------- Button Behaviour -------------------//
 
 $('body').on('click', 'button[load]', function () {
 
     let partial = $(this).attr('partial');
     let url = $(this).attr('load');
+    let callback = $(this).attr('attr-callback');
 
     if (typeof partial !== 'undefined' && partial !== false) {
 
@@ -108,8 +108,11 @@ $('body').on('click', 'button[load]', function () {
             type: 'POST',
             url: url,
             success: function (result) {
-                console.log(result);
-                $('#' + partial).empty().html(result);           
+                $('#' + partial).empty().html(result);
+
+                if (callback != null) {
+                    window[callback]();
+                }
             }
         });
 
@@ -118,7 +121,6 @@ $('body').on('click', 'button[load]', function () {
     }
 });
 
-
 $('body').on('click', '.account-menu button', function () {
     $('.account-menu button').each(function () {
         $(this).removeClass('selected');
@@ -126,3 +128,114 @@ $('body').on('click', '.account-menu button', function () {
 
     $(this).toggleClass('selected');
 })
+
+//------------------- Profile Picture -------------------//
+
+let canvas, context;
+
+function LoadProfilePicPartial() {
+    $.ajax({
+        type: 'POST',
+        url: "/Account/ProfileImage",
+        success: function (result) {
+            $('#accountContainer').empty().html(result);
+            SetupCanvas();
+        }
+    });
+}
+
+function SetupCanvas() {
+    canvas = $("#Image");
+    context = canvas.get(0).getContext("2d");
+}
+
+$('body').on('change', '#ProfilePicture_LoadImage', function () {
+    if (this.files && this.files[0]) {
+        if (this.files[0].type.match(/^image\//)) {
+
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                var img = new Image();
+                img.onload = function () {
+                    context.canvas.height = img.height;
+                    context.canvas.width = img.width;
+                    context.drawImage(img, 0, 0);
+                    var cropper = canvas.cropper({
+                        aspectRatio: 1
+                    });
+
+                    $('body').on('click', '#CropImage', function () {
+                        let form = $('#ProfileImageForm');
+                        let data = new FormData(document.getElementById('ProfileImageForm'));
+
+                        var croppedImageDataURL = getRoundedCanvas(canvas.cropper('getCroppedCanvas')).toDataURL("image/png", 0.5);
+                        var blob = dataURItoBlob(croppedImageDataURL);
+                        data.append('ProfileImage', blob);
+
+                        $.ajax({
+                            type: form.attr('method'),
+                            url: form.attr('action'),
+                            data: data,
+                            contentType: false,
+                            processData: false,
+                            success: function () {
+                                location.reload();
+                            },
+                            error: function () {
+                                LoadProfilePicPartial();
+                            }
+                        });
+
+                        $(form).trigger("reset");
+                    });
+                };
+
+                $('#BtnUpload').remove();
+
+                img.src = evt.target.result;
+            };
+
+            reader.readAsDataURL(this.files[0]);
+            $('.upload-reveal').show();
+        }
+    }
+});
+
+function getRoundedCanvas(sourceCanvas) {
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    var width = sourceCanvas.width;
+    var height = sourceCanvas.height;
+
+    canvas.width = width;
+    canvas.height = height;
+    context.imageSmoothingEnabled = true;
+    context.drawImage(sourceCanvas, 0, 0, width, height);
+    context.globalCompositeOperation = 'destination-in';
+    context.beginPath();
+    context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+    context.fill();
+    return canvas;
+}
+
+function dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {
+        type: mimeString
+    });
+}
